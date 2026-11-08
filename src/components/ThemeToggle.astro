@@ -1,0 +1,47 @@
+---
+import Icon from './Icon.astro'
+---
+
+<theme-toggle>
+  <button
+    class="cursor-pointer rounded-full border-2 p-2 transition-colors hover:border-slate-600 dark:text-white"
+  >
+    <span class="sr-only">Dark theme</span>
+
+    <span class="icon hidden dark:block">
+      <Icon icon="sun" />
+    </span>
+
+    <span class="icon visible dark:hidden">
+      <Icon icon="moon" />
+    </span>
+  </button>
+</theme-toggle>
+
+<script>
+  class ThemeToggle extends HTMLElement {
+    constructor() {
+      super()
+
+      const button = this.querySelector('button')!
+      const theme = localStorage.getItem('theme')
+
+      if (theme === 'dark') {
+        this.setTheme(true)
+      }
+
+      button.addEventListener('click', () => this.setTheme(!this.isDark()))
+    }
+
+    setTheme(isDark: boolean) {
+      document.documentElement.classList[isDark ? 'add' : 'remove']('dark')
+      localStorage.setItem('theme', this.isDark() ? 'dark' : 'light')
+    }
+
+    isDark() {
+      return document.documentElement.classList.contains('dark')
+    }
+  }
+
+  customElements.define('theme-toggle', ThemeToggle)
+</script>

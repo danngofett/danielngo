@@ -1,0 +1,62 @@
+---
+import { v2 as cloudinary } from 'cloudinary'
+import { CldImage } from 'astro-cloudinary'
+import type { CldImageProps } from 'astro-cloudinary'
+
+interface Props {
+  src: string
+  alt: string
+  caption?: string
+  width?: number
+  height?: number
+  format?: string
+  class?: string
+  loading?: CldImageProps['loading']
+}
+
+const {
+  src,
+  alt,
+  caption,
+  width,
+  height,
+  format,
+  class: classes,
+  loading = 'lazy',
+} = Astro.props
+
+cloudinary.config({
+  cloud_name: import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: import.meta.env.PUBLIC_CLOUDINARY_API_KEY,
+  api_secret: import.meta.env.PUBLIC_CLOUDINARY_API_SECRET,
+})
+
+const imageSrc = cloudinary.url(src, {
+  width: width,
+  height: height,
+  crop: 'fill',
+  quality: 'auto',
+  fetch_format: 'webp',
+})
+---
+
+<div class="space-y-4">
+  <CldImage
+    class={`${classes} rounded-xl ${caption ? 'mb-4 border border-neutral-100' : ''}`}
+    src={imageSrc}
+    alt={alt}
+    format={format}
+    crop="fill"
+    quality={80}
+    loading={loading}
+    width={width}
+    height={height}
+    sizes="100vw"
+  />
+
+  {
+    caption && (
+      <p class="mt-0 text-sm italic text-gray-500 dark:text-white">{caption}</p>
+    )
+  }
+</div>

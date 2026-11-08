@@ -1,0 +1,72 @@
+---
+import { getCollection, render } from 'astro:content'
+import TravelPost from '@layouts/TravelPost.astro'
+import Icon from '@components/Icon.astro'
+import BaseImage from '@components/BaseImage.astro'
+import Container from '@components/Container.astro'
+
+import type { InferGetStaticPropsType, GetStaticPaths } from 'astro'
+import { dateFormatter } from '@helpers/date-formatter'
+
+export const getStaticPaths = (async () => {
+  const timeline = await getCollection('timeline')
+
+  return timeline.map((entry) => {
+    const [year, country, day] = entry.id.split('/')
+
+    return {
+      params: { year, country, day },
+      props: { entry },
+    }
+  })
+}) satisfies GetStaticPaths
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>
+
+const { entry } = Astro.props as Props
+
+const breadcrumb = entry.id.split('/').slice(0, 2).join('/')
+
+const { Content } = await render(entry)
+---
+
+<TravelPost
+  seo_title={`${entry.data.country} | Day ${entry.data.day} | Daniel Ngo`}
+  image={entry.data.featured_image_src}
+>
+  <Container>
+    <div class="flex items-center gap-2 py-8 md:py-16 lg:py-32 dark:text-white">
+      <Icon icon="arrow" className="h-6 w-6 rotate-90 transform" />
+
+      <a href={`/travels/${breadcrumb}`} class="relative -top-[1px]">
+        Back to {entry.data.country}
+      </a>
+    </div>
+
+    <div class="py-24">
+      <h1 class="mb-2 text-5xl dark:text-white">{entry.data.title}</h1>
+      <p class="text-slate-500 dark:text-slate-200">
+        {dateFormatter(entry.data.date)}
+      </p>
+    </div>
+
+    <div class="mb-24 overflow-hidden rounded-2xl">
+      {
+        entry.data.featured_image_src && (
+          <BaseImage
+            class="block"
+            src={entry.data.featured_image_src}
+            alt={entry.data.featured_image_alt || ''}
+            width={2736}
+            height={1824}
+            format="webp"
+          />
+        )
+      }
+    </div>
+
+    <div class="prose dark:prose-invert max-w-full">
+      <Content />
+    </div>
+  </Container>
+</TravelPost>

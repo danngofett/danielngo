@@ -1,0 +1,23 @@
+---
+interface Props {
+  text: string
+  emoji?: string
+  color: 'default' | 'yellow'
+}
+
+const { text, color = 'default', emoji } = Astro.props
+
+if (!['default', 'yellow'].includes(color))
+  throw new Error(`Invalid color: ${color}`)
+
+const colors = {
+  default: 'dark:bg-gray-800 bg-gray-50 border-gray-300 dark:border-gray-700',
+  yellow:
+    'dark:bg-yellow-800 bg-yellow-50 border-yellow-300 dark:border-yellow-700',
+}
+---
+
+<div class=`p-8 py-2 text-lg border-l-4 relative rounded-r-xl ${colors[color]}`>
+  {emoji && <span class="inline-block pt-4 text-2xl">{emoji}</span>}
+  <p>{text}</p>
+</div>

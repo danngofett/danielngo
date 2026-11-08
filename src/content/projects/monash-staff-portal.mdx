@@ -1,0 +1,238 @@
+---
+title: Monash Staff Portal
+description: An internal-facing platform for staff to access a range of Monash University services and information.
+featured_image_src: projects/monash-staff-portal/featured-image
+featured_image_alt: Monash Staff Portal
+featured: true
+year: 2024
+draft: false
+tags:
+  [
+    React,
+    Node.js,
+    Next.js,
+    Turborepo,
+    Okta Auth,
+    Playwright,
+    Storybook,
+    Figma,
+    Agile,
+  ]
+---
+
+import BaseImage from '@components/BaseImage.astro'
+import BaseVideo from '@components/BaseVideo.astro'
+import NoteText from '@components/NoteText.astro'
+
+# TLDR;
+
+- **Role**: Lead Front-end Developer
+- **Duration**: 6 months
+- **Team**: 3 developers, 1 designer, 1 business analyst, 1 change manager, 1 product manager
+- **Tech Stack**: Monorepo, Next.js frontend, Express backend, GCP, Playwright E2E tests, Firestore database, Okta for authentication
+- **Outcome**: Successfully launched in May 2024, well-received by staff at Monash University.
+
+---
+
+<NoteText text="My responsibilities as the lead front-end developer involved setting up the technical foundation and workflow for developers to confidently build the application. As well as, collaborating closely with the team to ensure that the design was feasible and could be implemented within the project timeline." />
+
+The Monash Staff Portal was a strategic initiative to replace my.monash with a custom solution reduce costs and improve efficiency by consolidating various internal systems and services into a single platform, whilst providing a consistent user experience across the new Portal UI design system.
+
+<div class="relative h-0 overflow-hidden pb-[56.25%]">
+  <iframe
+    class="absolute top-0 left-0 w-full h-full"
+    src="https://www.youtube-nocookie.com/embed/5uIHreupsTw?si=zkD3BmxstfrXYiXk&showinfo=0&rel=0"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen
+  ></iframe>
+</div>
+
+## The Challenges
+
+1. **Vendor lock-in**: My.monash was run by an external vendor, last updated in 2016, and no longer met Monash’s needs. The University wanted to move away from the vendor lock-in and build an in-house platform that would be more flexible and scalable.
+
+2. **Complexity**: The project involved the migration and transformation of data from legacy systems dating close to 10 years of content, preserving most-used features, and the development of new features.
+
+3. **Re-design**: The existing Staff Portal was heavily inspired by the Windows Metro design system which had become outdated combined with a lack of consistency in the user experience across the more recent rollout of Portal platforms frustrated staff.
+
+4. **Contract termination**: The vendor contract was ending, and Monash were under a tight deadline and required a team of developers, designers, and business analysts to work together to deliver the project within 6 months.
+
+## The Solution
+
+- **Feature parity**: The new Portal was designed to provide feature parity with the existing Portal, while also introducing new features and services that would improve the user experience.
+- **Data driven**: The project started with an audit of the existing content and services, with a focus on identifying the most-used features and services that would need to be preserved in the new Portal.
+- **User research**: The design team conducted user research to identify pain points and areas for improvement in the existing Portal, with a focus on navigation and search functionality.
+- **Technical solution**: Reusing a tested back-end architecture, modern frameworks and established patterns across the Portal helped to reduce development time and costs, while also ensuring that the Portal had a great developer experience and reduce developer onboarding time.
+- **Improved experience**: Designs were made to be more user-friendly and intuitive, with a focus on navigation and search functionality that would make it easier for staff to find the information and services they need.
+- **Enhanced accessibility**: The new Portal was designed to be accessible to all users, with features such as keyboard navigation and focus states that would make it easier for staff with disabilities to use the Portal.
+- **Change management**: Change management was a key focus for the project, with a dedicated team working on communication and training materials to ensure that staff were informed about the changes and how to use the new Portal.
+
+## Technical Implementation
+
+### Monorepo
+
+A monorepo structure was introduced to mostly to manage the front-end + back-end applications, with a shared component library that could be used across both applications.
+
+This allowed for a clearer separation of concerns and easier code sharing between the two applications but also paves the way for future projects to be built on the same architecture.
+
+### Next.js
+
+The front-end was kept relatively simple. The application was built using React.js and Next.js, with the majority development of UI components in Storybook to allow more isolated development and testing of components. CSS was kept minimal with modules.
+
+<BaseImage
+  src="projects/monash-staff-portal/homepage"
+  alt="Desktop dashboard of Monash Staff Portal"
+  caption="Homepage with personalised content based on user preferences."
+/>
+
+Although, not many features had leveraged SSR - the usage of Next.js allowed the team to develop with an opinionated and documented structure, reducing friction of introducing developer biases and patterns that would be counter-intuitive to the overall developer experience.
+
+### GCP
+
+The application was deployed on Google Cloud Platform (GCP) using Google Cloud Run and Cloud Firestore for the database. This allowed for a scalable and reliable infrastructure that could handle the demands of the Staff Portal and host both the front-end and back-end applications independently. Docker was used to containerise the application and deploy it to Cloud Run environments (Dev, UAT and Prod).
+
+### The Backend Architecture
+
+The backend was built using Node.js and Express.js, with a Firestore database and Okta for authentication. The original design of the backend was designed to be scalable and reliable, with a focus on performance and security.
+
+However, due to the velocity and requirements for the project - the backend was also shared with another project running in parallel which uses similar APIs and services. In hindsight, this was a good decision as it allowed for a more robust and tested backend architecture to be used across both projects and reduced the time to market for the Staff Portal.
+
+But this also meant that the front-end developers across all Portal projects had to be more mindful of the backend changes and how it would affect the development of new features that would only exist in the Staff Portal.
+
+Shortly after the launch of the Staff Portal, the backend was forked from the original architecture and re-developed to be more suited to the needs of the Staff Portal and other projects - with an end goal to fully migrate the backend into the monorepo so that the front-end developers could have more control over the backend services.
+
+## Design Approach
+
+To address this, we developed a new Portal UI design system that would provide a consistent user experience across the new Portal. The new design system included a set of reusable components that could be used to build new features and services.
+
+The design team worked closely with the development team to ensure that the design was feasible and could be implemented within the project timeline.
+
+### Storybook
+
+Storybook was used to create a living style guide that would help the design and development teams to collaborate and ensure that the design was consistent across the Portal.
+
+<div className='grid grid-cols-2 gap-4'>
+  <BaseImage
+    src="projects/monash-staff-portal/storybook-welcome"
+    alt="Storybook UI components"
+    caption="A welcome screen to the Portal UI library."
+  />
+
+<BaseImage
+  src="projects/monash-staff-portal/storybook-typography"
+  alt="Storybook search component"
+  caption="Type system and usage guides."
+/>
+
+<BaseImage
+  src="projects/monash-staff-portal/storybook-icons"
+  alt="Storybook icons"
+  caption="A list of icons available in the library."
+/>
+
+  <BaseImage
+    src="projects/monash-staff-portal/storybook-component"
+    alt="Storybook sortable menu component"
+    caption="Sortable Links Menu component with storybook arguments."
+  />
+</div>
+
+### Accessibility
+
+<NoteText
+  text="Accessibility became a part of the team culture very early on in the design and development. Ensuring that it would not remain an afterthought and became a selling point of the redesign."
+  color="yellow"
+/>
+
+The design team worked closely with the development and usability teams to ensure that the Portal was accessible to all users. Advisory guidelines were followed to ensure that the Portal was compliant with WCAG 2.1 AA standards.
+
+<BaseImage
+  src="projects/monash-staff-portal/accessibility-search"
+  alt="Keyboard navigation and focus states on search bar animation"
+  caption="Keyboard navigation and focus states were implemented to improve accessibility."
+/>
+
+An accessibility audit was conducted to identify areas where the Portal could be improved, and the product team worked to address these issues before launch.
+
+### Personalisation
+
+The Portal was designed to be personalised to the user, with the ability to customise the layout and content based on the user's preferences. This personalisation also included selecting a pet, which would be displayed on the user's profile page for a bit of fun.
+
+<BaseImage
+  src="projects/monash-staff-portal/homepage-minimal"
+  alt="Alternative homepage layout with slim content"
+  caption="Alternative homepage layout with slim content."
+/>
+
+### Micro-interactions
+
+Micro-interactions that provide a sense of delight and feedback to the user were implemented throughout the Portal. These interactions help to guide the user through the interface and provide a more engaging experience and introduce some more life to the designs.
+
+<div className="grid grid-cols-2 gap-4">
+  <BaseImage
+    src="projects/monash-staff-portal/interaction-pin"
+    alt="Pinning a card to the dashboard animation"
+    caption="The pin interaction provides feedback to the user when they pin a card to their dashboard."
+  />
+
+  <BaseImage
+    src="projects/monash-staff-portal/interaction-star"
+    alt="Add a parking spot to parking list"
+    caption="The star interaction provides feedback to the user when they favourite a parking spot."
+  />
+</div>
+
+## Automated E2E Testing
+
+We used Playwright to write end-to-end tests that would ensure the Portal was working as expected and that new features were not breaking existing functionality during development. As part of the release process, the tests were run automatically to catch any regressions before they reached production.
+
+<BaseImage
+  src="projects/monash-staff-portal/playwright-test-results"
+  alt="Playwright test results"
+  caption="Playwright test results for the Monash Staff Portal."
+/>
+
+As we aim to reduce technical debt due to the velocity in which we were building the Staff Portal, we are able to confidently refactor and make changes to the codebase without the fear of breaking existing functionality with the help of automated tests and clear reporting.
+
+<BaseImage
+  src="projects/monash-staff-portal/playwright-trace-viewer"
+  alt="Playwright in trace viewer to debug"
+  caption="Playwright Trace viewer functionality on a single test."
+/>
+
+## Onboarding and communication
+
+The business analysts and change management team worked closely with the design and development teams to ensure that the product and timelines were aligned with the needs of the stakeholders.
+
+A series of workshops and training sessions were held to introduce staff to the new Portal and provide them with the information they needed to get started. The design team created a series of onboarding screens and tooltips to guide staff through the new Portal and help them get familiar with the new features and services.
+
+A roadmap was created to outline the key milestones and deliverables for the project, with regular updates provided to staff to keep them informed about the progress of the project.
+
+## Outcome
+
+The Monash Staff Portal was successfully launched in 2024 and has been well-received by staff at Monash University. The new Portal UI design system has provided a consistent user experience across the new Portal and has helped to reduce costs and improve efficiency.
+
+<div className="grid grid-cols-2 gap-4">
+  <BaseImage
+    src="projects/monash-staff-portal/result-new"
+    alt="Results: Liked or loved it 63%. Neutral 25%. Hated or disliked it 12%"
+    caption="Overall impressions for new Staff Portal"
+  />
+
+  <BaseImage
+    src="projects/monash-staff-portal/result-old"
+    alt="Results: Yes 57%. Unsure 26%. No 17%"
+    caption="Overall impressions if the new portal was an improvement."
+  />
+</div>
+
+Overall, using an in-house platform has significant benefits for the University:
+
+- Custom-built portals are scalable, and more flexible than my.monash, making it easier to add integrations and build tailored solutions to suit the needs of Monash staff and students.
+- No longer paying for an external product, which saves the University money.
+- Using an in-house platform helps to develop skills and capacity in the teams and staff members who work on the projects.
+- The portals are Monash's intellectual property, so they don’t need to ask permission to share this knowledge with other teams and projects within Monash.
+- Knowledge shared within the team can be used to build other portals and applications, which can be used to improve the student experience and staff productivity at a lower cost.

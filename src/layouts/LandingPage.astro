@@ -1,0 +1,36 @@
+---
+import BaseHead from '@components/BaseHead.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+import Container from '@components/Container.astro'
+
+const { title, seo_title, seo_description, featured_image_src } = Astro.props
+
+const SEO_TITLE = seo_title ? `${seo_title} | ` : ''
+---
+
+<html lang="en">
+  <head>
+    <BaseHead
+      title={`${SEO_TITLE} Daniel Ngo`}
+      description={seo_description}
+      image={featured_image_src}
+    />
+  </head>
+
+  <body class="bg-white transition duration-500 dark:bg-slate-900">
+    <Header />
+
+    <main>
+      <Container>
+        <h1 class="dark:text-white">{title}</h1>
+
+        <div class="flex flex-col gap-8 md:gap-16 lg:gap-24">
+          <slot />
+        </div>
+      </Container>
+    </main>
+
+    <Footer />
+  </body>
+</html>

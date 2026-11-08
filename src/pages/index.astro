@@ -1,0 +1,78 @@
+---
+import BaseHead from '@components/BaseHead.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+import Button from '@components/Button.astro'
+import TextReveal from '@components/TextReveal'
+import Container from '@components/Container.astro'
+
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
+
+const LANGUAGES = [
+  'React',
+  'Typescript',
+  'Next.js',
+  'Node.js',
+  'Tailwind',
+  'GCP',
+  'Vercel',
+  'Vue',
+  'Storybook',
+  'Nuxt',
+  'Vanilla JS',
+  'Lit',
+  'Flutter',
+  'Astro',
+  'Liquid',
+]
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+
+  <body class="antialiased bg-white transition duration-500 dark:bg-slate-900">
+    <h1 class="sr-only">{SITE_TITLE}</h1>
+
+    <Header title={SITE_TITLE} />
+
+    <Container>
+      <header class="flex flex-col gap-24 px-4 py-12 md:py-24 lg:py-36">
+        <div class="flex items-center gap-24">
+          <div class="grid lg:grid-cols-5">
+            <div class="col-span-3 py-3">
+              <h2
+                class="text-3xl leading-tight text-black md:text-4xl dark:text-white"
+              >
+                Developer, designer and photography enthusiast developing
+                full-stack applications and design systems with
+
+                <TextReveal
+                  className="relative top-[9px]"
+                  client:load
+                  words={LANGUAGES}
+                  duration={1000}
+                />
+              </h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="mr-auto flex flex-col gap-4">
+          <div>
+            <Button href="/projects">View my projects</Button>
+          </div>
+
+          <div>
+            <Button href="/travels" variant="secondary">
+              Follow my travels
+            </Button>
+          </div>
+        </div>
+      </header>
+    </Container>
+    <Footer />
+  </body>
+</html>

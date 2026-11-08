@@ -1,0 +1,39 @@
+---
+import HeaderLink from './HeaderLink.astro'
+import { SITE_TITLE } from '../consts'
+import Icon from '@components/Icon.astro'
+import ThemeToggle from './ThemeToggle.astro'
+import NavToggle from './NavToggle.astro'
+import NavDrawer from './NavDrawer.astro'
+import Container from './Container.astro'
+---
+
+<Container>
+  <nav class="flex items-center justify-between gap-4 py-4 md:py-6">
+    <div class="logo flex items-center gap-2 text-2xl dark:text-white">
+      <div class="w-10" aria-hidden="true">
+        <Icon icon="danielngo" aria-hidden="true" />
+      </div>
+
+      <a class="underline-animation" href="/">{SITE_TITLE}</a>
+    </div>
+
+    <div class="hidden gap-4 lg:flex dark:text-white">
+      <HeaderLink class="px-5 py-2" href="/">Home</HeaderLink>
+      <HeaderLink class="px-5 py-2" href="/about">About</HeaderLink>
+      <HeaderLink class="px-5 py-2" href="/projects">Projects</HeaderLink>
+      <!-- <HeaderLink class="px-5 py-2" href="/blog">Blog</HeaderLink> -->
+      <HeaderLink class="px-5 py-2" href="/travels">Travels</HeaderLink>
+    </div>
+
+    <NavDrawer />
+
+    <div class="flex gap-4">
+      <div class="md:hidden">
+        <NavToggle />
+      </div>
+
+      <ThemeToggle />
+    </div>
+  </nav>
+</Container>

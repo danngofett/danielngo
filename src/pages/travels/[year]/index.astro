@@ -1,0 +1,32 @@
+---
+import Card from '@components/Card.astro'
+import IntroHeader from '@components/IntroHeader.astro'
+import LandingPageLayout from '@layouts/LandingPage.astro'
+import { getCollection } from 'astro:content'
+
+export async function getStaticPaths() {
+  const entries = await getCollection('travels')
+
+  return entries.map((entry) => ({
+    params: { year: entry.data.year },
+  }))
+}
+
+const { year } = Astro.params
+
+const countries = await getCollection('travels').then((entry) => {
+  return entry.filter((item) => {
+    // Force casting since Astro.params converts frontmatter numbers to string
+    const entryYear = year as unknown as string
+    return item.data.year === parseInt(entryYear)
+  })
+})
+---
+
+<LandingPageLayout seo_title={`${year} | Daniel Ngo`}>
+  <IntroHeader title={`Travel ${year}`} description={`Travel ${year}`} />
+
+  <div class="grid grid-cols-3 gap-12">
+    {countries.map((country) => <Card post={country} />)}
+  </div>
+</LandingPageLayout>

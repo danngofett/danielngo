@@ -1,0 +1,64 @@
+{
+  "name": "danielngo-astro",
+  "license": "MIT",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=18",
+    "pnpm": "10"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "format": "prettier --write .",
+    "cloudinary:rename": "node scripts/rename.mjs travels/ukraine"
+  },
+  "dependencies": {
+    "@astrojs/check": "0.9.12",
+    "@astrojs/internal-helpers": "0.7.6",
+    "@astrojs/mdx": "4.3.14",
+    "@astrojs/react": "4.4.2",
+    "@astrojs/rss": "4.0.19",
+    "@astrojs/sitemap": "3.7.4",
+    "@astrojs/ts-plugin": "1.10.12",
+    "@react-spring/web": "10.1.2",
+    "@tailwindcss/postcss": "4.3.5",
+    "@tailwindcss/vite": "4.3.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "astro": "5.18.2",
+    "astro-cloudinary": "1.4.0",
+    "jsdom": "31.0.0",
+    "postcss": "8.5.32",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "typescript": "5.9.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "0.5.20",
+    "@types/fs-extra": "11.0.4",
+    "@types/lodash.debounce": "4.0.9",
+    "cloudinary": "2.11.0",
+    "dotenv": "18.0.9",
+    "fs-extra": "11.4.1",
+    "lodash.debounce": "4.0.8",
+    "node-html-parser": "9.0.7",
+    "prettier": "3.9.10",
+    "prettier-plugin-astro": "1.1.2",
+    "prettier-plugin-tailwindcss": "0.8.1",
+    "sharp": "0.35.5",
+    "tailwindcss": "4.3.5",
+    "ts-node": "10.9.2",
+    "zod": "4.6.7"
+  },
+  "packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af",
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  }
+}

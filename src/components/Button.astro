@@ -1,0 +1,31 @@
+---
+interface ButtonProps {
+  onClick?: () => void
+  href?: string
+  variant?: 'primary' | 'secondary'
+}
+
+const { href, onClick, variant = 'primary' } = Astro.props as ButtonProps
+
+const styles = `text-inverse focus-ring bg-inverse group inline-block transform items-center justify-center space-x-5 whitespace-nowrap rounded-full px-11 py-6 text-lg font-normal  focus:outline-none ${
+  variant === 'primary'
+    ? 'bg-black text-white dark:bg-white dark:text-black'
+    : 'border-[2px] bg-white text-black dark:bg-transparent dark:text-white hover:dark:bg-white hover:dark:text-black transition-colors'
+}`
+---
+
+{
+  href && (
+    <a href={href} class={styles}>
+      <slot />
+    </a>
+  )
+}
+
+{
+  onClick && (
+    <button type="button" class={styles}>
+      <slot />
+    </button>
+  )
+}

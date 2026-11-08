@@ -1,0 +1,65 @@
+---
+import { linkResolver } from '@utils/link-resolver'
+
+import type { CollectionEntry } from 'astro:content'
+import BaseImage from './BaseImage.astro'
+
+interface Props {
+  post: CollectionEntry<'travels' | 'projects'>
+}
+
+const { data, collection } = Astro.props.post
+---
+
+<a
+  class="group relative mx-auto grid w-full cursor-pointer grid-cols-[160px_1fr] gap-4 rounded-2xl border-4 border-white bg-gray-100 p-4 hover:outline-2 hover:outline-neutral-700 md:grid-cols-[1fr_240px] md:gap-8 md:p-8 lg:grid-cols-[1fr_420px] lg:gap-12 xl:grid-cols-[1fr_720px] dark:border-gray-800 dark:bg-gray-800 dark:hover:outline-white dark:lg:bg-gray-800"
+  href={linkResolver(Astro.props.post)}
+>
+  <div
+    class="items-stretch order-2 block h-full md:order-1 md:space-y-4 lg:flex lg:flex-col lg:justify-between lg:px-6 lg:py-12"
+  >
+    <div class="space-y-2 md:space-y-4 md:pr-8">
+      <h2
+        class="hidden mb-2 font-normal text-black text-md md:block md:text-lg dark:text-white"
+      >
+        {data.year} Spotlight
+      </h2>
+
+      <h3
+        class="text-xl leading-tight text-black md:text-3xl lg:text-4xl dark:text-white"
+      >
+        {data.title}
+      </h3>
+
+      <p
+        class="mt-2 text-base font-normal text-slate-500 md:text-xl dark:text-slate-200"
+      >
+        {data.description}
+      </p>
+    </div>
+
+    <div
+      class="hidden mt-8 text-base font-normal group-hover:underline-animation md:block md:text-xl"
+    >
+      <span class="inline-block underline-animation dark:text-white">
+        View the {collection === 'travels' ? 'article' : 'project'}
+      </span>
+    </div>
+  </div>
+
+  {
+    data.featured_image_src && (
+      <div class="order-1">
+        <BaseImage
+          src={data.featured_image_src}
+          alt={data.featured_image_alt || data.title || ''}
+          width={3840}
+          height={1920}
+          format="webp"
+          class="block rounded-lg"
+          loading="eager"
+        />
+      </div>
+    )
+  }
+</a>

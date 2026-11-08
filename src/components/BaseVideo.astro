@@ -1,0 +1,22 @@
+---
+interface Props {
+  src: string
+  type?: string
+  caption?: string
+}
+
+const { src, type = 'video/mp4', caption } = Astro.props
+---
+
+<div class="relative h-0 overflow-hidden pb-[56.25%]">
+  <video class="absolute top-0 left-0 object-cover w-full h-full">
+    <source src={src} type={`video/${type}`} />
+    <p class="text-gray-700">Your browser does not support the video tag.</p>
+  </video>
+
+  {
+    caption && (
+      <p class="mt-0 text-sm italic text-gray-500 dark:text-white">{caption}</p>
+    )
+  }
+</div>

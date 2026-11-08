@@ -1,0 +1,224 @@
+---
+title: Frame
+description: A flexible Shopify Plus framework for scaffolding new small to enterprise-level projects with internationalisation
+featured_image_src: projects/frame/featured-image
+featured_image_alt: Shopify theme
+url: https://frame-3.myshopify.com
+featured: false
+year: 2018
+draft: false
+tags: [Shopify, Liquid, JavaScript ES6, Vue, SCSS, Webpack]
+---
+
+import BaseImage from '@components/BaseImage.astro'
+import NoteText from '@components/NoteText.astro'
+
+# TLDR;
+
+- **Role**: Lead Developer
+- **Duration**: 3 months to production (ongoing maintenance until departure in 2019)
+- **Team**: 1 developer, 1 project manager, 2 rotating developers
+- **Tech Stack**: Shopify, Liquid, JavaScript, SCSS, Vue, Webpack
+- **Outcome**: Used to build over 30+ Shopify plus store over the span of 2 years
+
+---
+
+<NoteText
+  emoji="⚠️ Disclaimer"
+  text="This Shopify framework was built many many years ago when I was a Tech Lead at We Make Websites in 2018, however, since then there have been structural changes to the company and operations, the team itself and their clients. The work below will be solely based on my experience at the agency and the Shopify platform at the time. I do not attempt to take credit for the work of the team nor any of the updates but rather the foundations in which those websites were built off."
+/>
+
+## Overview
+
+Frame was a self-funded strategic initiative for We Make Websites to create a flexible Shopify framework for scaffolding new projects - ranging from small to enterprise-level clients with a focus on internationalisation and global reach. The goal was to reduce the time and cost of building new Shopify stores by providing a solid foundation that could be customised to meet the needs of each client.
+
+## Background
+
+Initially, Frame was built as a side project by the previous Tech Lead to help the agency build out new Shopify stores more efficiently and to provide a consistent and high-quality experience for clients. However, it quickly gained traction internally and was adopted as the standard framework for all new Shopify projects. But it was built on an outdated boilerplate and was in need of a major overhaul to bring it up to date with the latest technologies and best practices.
+
+This project was particularly interesting as it was the first time I had to build a framework from scratch and was going to be adopted by the entire agency and marketed out to clients. I was responsible for the architecture, development, and maintenance of the framework, as well as providing support and training to the development and product team. It was a challenging project that required a deep understanding of the Shopify platform and the needs of the agency's clients.
+
+<BaseImage
+  src="projects/frame/homepage"
+  alt="Desktop homepage of Frame v3"
+  caption="Desktop view of the homepage, showcasing the importance of simplicity."
+/>
+
+## The Challenge
+
+Shopify at the time was a rapidly evolving platform with new features and updates being released regularly. Building a new Shopify store from scratch required a significant amount of time and effort to set up the basic structure and functionality. This often resulted in delays, inconsistencies in quality and increased costs for agency and clients.
+
+- **Flexibility**: The challenge was to create a framework that cater to both small boutique Shopify stores with minimal features as well as enterprise multi-store projects requiring a full-suite a features. Finding the balance between flexibility and scalability was crucial to the success and adoption of the framework internally by developers.
+
+- **Internationalisation**: The agency was growing rapidly with high profile clients that would elevate their reputation in the industry as the go-to agency for internationalisation on Shopify Plus. The framework needed to be able to support multiple languages, currencies, and regions to meet the needs of these clients.
+
+- **Performance**: The framework needed to be optimised for performance to ensure fast load times and a smooth user experience. This was particularly important for clients with large product catalogues and high traffic volumes.
+
+- **Accessibility**: "In the States, everyone loves to sue" as my Director would say. The framework needed to be accessible to ensure compliance with accessibility standards and reduce the risk of legal issues. This was particularly important for clients in the US and Europe.
+
+- **Shopify**: The platform itself was still evolving, and to many developers, it was a black box. The framework needed to be able to push the boundaries to take advantage of new emerging technologies like Javascript frameworks, SCSS and local development environments.
+
+<BaseImage
+  src="projects/frame/product-card-grid"
+  alt="Desktop product card grid of Frame"
+  caption="Product card grid with quick view and swatches was a default section built into the framework."
+/>
+
+## The Solution
+
+The solution was to leverage an existing boilerplate, [Slate](https://github.com/Shopify/slate), which had been developed in-house at Shopify which offered many of the developer tools and that were best for the agency at the time to rapidly build out websites with minimal bloat to the theme code. Quality of life things like hot reloading, SCSS, ES6, and a local development environment were all included.
+
+However, shortly after the project started, Shopify announced that they would be deprecating Slate in favour of a new tool called [Theme Kit](https://shopify.github.io/themekit/). This was a major setback for the project as we had to decide whether to continue with Slate or switch to Theme Kit. After much deliberation, we decided to stick with Slate as it was more feature-rich and had a larger community of developers.
+
+<BaseImage
+  src="projects/frame/pdp"
+  alt="Desktop product detail page of Frame"
+  caption="Desktop view of the custom designed product detail page, showcasing the importance of the product imagery and presentation."
+/>
+
+## Feature list
+
+On top of the boilerplate, we would introduce our own custom modules which would be baked into the source code which could be toggled on-and-off depending on the client's needs. These modules would include things like but not limited to:
+
+<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+  <div>
+    <h3>UI/UX</h3>
+    <ul class="list-disc">
+      <li>Quick view</li>
+      <li>Mega menu</li>
+      <li>Custom swatches</li>
+      <li>Quantity selectors</li>
+      <li>Free delivery progress bar</li>
+      <li>Slide-out cart drawer</li>
+      <li>Newsletter pop-up</li>
+      <li>Sort and filter</li>
+      <li>Product image zoom</li>
+      <li>Alternating product card images</li>
+    </ul>
+  </div>
+  <div>
+    <h3>Custom integrations</h3>
+    <ul class="list-disc">
+      <li>GTM Data Layers</li>
+      <li>Predictive search</li>
+      <li>Geolocation detection</li>
+      <li>Country selector</li>
+      <li>Shopify Reviews implementation</li>
+      <li>Store preferences to select country and currency</li>
+      <li>Custom checkout flow</li>
+      <li>Component Library & Styleguide</li>
+    </ul>
+  </div>
+  <div>
+    <h3>Optimisations</h3>
+    <ul class="list-disc">
+      <li>Lazy-load and responsive image loading</li>
+      <li>Accessibility WCAG 2.1 compliance</li>
+      <li>OGP optimised for social sharing</li>
+      <li>Automated E2E testing with Cypress</li>
+      <li>Critical CSS inlining</li>
+      <li>Performance budgeting</li>
+      <li>SEO optimised</li>
+    </ul>
+  </div>
+</div>
+
+These modules were discussed and prioritised internally based on what would be the most common features that clients would request. This would allow us to build out the framework with a solid foundation and then customise it to meet the needs of each client making it a cost-effective solution for the agency.
+
+<BaseImage
+  src="projects/frame/quick-view"
+  alt="Product card grid with quick view and swatches"
+  caption="Quick view modal with swatches and product information."
+/>
+
+It would be up to the project team's discretion to remove non-required modules to avoid code bloat and optimise page loading times. This would also allow the team to focus on the core features of the website and not get bogged down with unnecessary or re-implementing features.
+
+## Design Approach
+
+The design approach was to create a clean and minimalistic design that would be easy to customise and adapt to different clients. The focus was on simplicity and usability, with a strong emphasis on the user experience.
+
+However, 90% of the time the design would be provided by the client or designed internally. The framework was built to be flexible enough to accommodate any design, with a focus on modularity and reusability.
+
+<BaseImage
+  src="projects/frame/example-alessi"
+  alt="Alessi PDP"
+  caption="One of the first stores to be built on Frame, showcasing the flexibility in it's layout."
+/>
+
+<BaseImage
+  src="projects/frame/example-david-beckham"
+  alt="David Beckham Eyewear"
+  caption="David Beckham Eyewear. A minimalistic design with a focus on the product imagery. A lot of the design was done in-house."
+/>
+
+<BaseImage
+  src="projects/frame/example-third-man"
+  alt="Third Man Records PDP"
+  caption="Another example of a store built on Frame, displaying the PDP page."
+/>
+
+### Component library
+
+The component library was an embedded single page application that would showcase all the components that were available to the developer. This would include the code snippet, design tokens, and the HTML required for the component to work. This would allow the developer to quickly see how the component would look and behave in the browser and provide an environment to develop in isolation.
+
+This was particularly useful for developers who were new to the project to have an understanding of the components that were available to them and how they could be used.
+
+<BaseImage
+  src="projects/frame/component-library"
+  alt="Component library of Frame"
+  caption="Component library showcasing the different components available to developers."
+/>
+
+## Outcome
+
+The framework was a success and was used to build over 20 Shopify Plus stores over the span of a few years, and long after my departure from the agency. It helped to reduce the time and cost of building new Shopify stores and provided a solid foundation that could be customised to meet the needs of each client.
+
+It was a great learning experience and helped me to understand the importance of modularity, reusability, documentation, and scalability in web development. It helped me build up my confidence as a developer, face my fears of imposter syndrome and learn to trust my instincts and decisions.
+
+Through the development of Frame, I was able to learn a lot about the Shopify platform, the challenges of building a framework, and the importance of collaboration and communication within an agency. It was a challenging project, but it was also incredibly rewarding and helped me to grow as a developer and as a person.
+
+<BaseImage
+  src="projects/frame/homepage"
+  alt="Desktop homepage of Monash Enrich"
+  caption="Desktop view of the homepage, showcasing the importance of the search experience."
+/>
+
+## Clients
+
+<NoteText text="I have no direct affiliation with the clients below, nor am I trying to take away the credit for the hard work that each team had done on their respective stores. This section is to simply showcase the Frame framework and its flexibility in design and features, longevity, and impact on the agency and its clients." />
+
+Some of the client's below were some notable ones that my team and I had the pleasure of working with, about half of them were built after my departure from the agency but I wanted to mention them as they were still built on Frame.
+
+<div class="grid md:grid-cols-2 gap-4">
+  <div>
+    - [Source BMX](https://us.sourcebmx.com/en-au)
+    - [Hasbro Pulse](https://hasbropulse.com/) *
+    - [Alessi](https://alessi.com/)
+    - [Pangaia](https://pangaia.com/) *
+    - [Ford](https://shop.ford.co.uk/)
+    - [David Beckham Eyewear](https://davidbeckhameyewear.com/)
+  </div>
+
+  <div>
+    - [Jigsaw](https://www.jigsaw-online.com/)
+    - [HyperX](https://hyperx.com/)
+    - [Sofa Sofa](https://sofasofa.co.uk/)
+    - [TOAST](https://www.toa.st/)
+    - [Third Man Records](https://thirdmanrecords.com/)
+  </div>
+</div>
+
+<div class="text-sm text-gray-500 italic">
+  \* It is worth noting that over the years, some of the clients have moved away
+  from the agency, and may have undergone redesigns or changes to their website
+  that may not reflect the original work done by the team. I will note them with
+  an asterisk.
+</div>
+
+## Key Learnings
+
+- **Documentation**: It is important to document everything, from the architecture to the code to the design decisions. This will help to ensure that everyone is on the same page and that the project runs smoothly.
+
+- **Transparency**: During the early stages of the project, I felt isolated and overwhelmed by the scope of the project. However, by being transparent with my team and sharing my concerns, I was able to get the support and guidance that I needed to succeed.
+
+- **Collaboration**: Building a framework is a team effort and requires collaboration and communication between all departments. By working together and sharing our knowledge and expertise, we were able to build a successful framework that met the needs of our clients.

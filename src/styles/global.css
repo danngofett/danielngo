@@ -1,0 +1,9 @@
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:focus:not(:focus-visible) {
+  outline: 0;
+  box-shadow: none;
+}

@@ -1,0 +1,21 @@
+.underline-animation::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 0.3s;
+}
+
+.underline-animation:hover::after {
+  width: 100%;
+}
+
+.underline-animation:focus::after {
+  width: 100%;
+}
+
+.nav-active .nav-drawer {
+  translate: 0 0;
+  opacity: 1;
+}

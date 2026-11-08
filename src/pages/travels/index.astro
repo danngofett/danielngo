@@ -1,0 +1,45 @@
+---
+import Spotlight from '@components/Spotlight.astro'
+import Card from '@components/Card.astro'
+import IntroHeader from '@components/IntroHeader.astro'
+import LandingPageLayout from '@layouts/LandingPage.astro'
+import { getCollection } from 'astro:content'
+
+const entries = await getCollection('travels')
+
+const featuredPosts = entries.filter((entry) => {
+  return entry.data.featured && !entry.data.draft
+})
+
+const posts = entries.filter((entry) => {
+  return !entry.data.featured && !entry.data.draft
+})
+---
+
+<LandingPageLayout
+  seo_title="Travels"
+  seo_description="A collection of travel stories and photos I have taken from around the world."
+>
+  <IntroHeader
+    title="Travels"
+    description="Exploring corners of the world. Discovering landscapes, people, plates, and places through the lens of camera and curiosity"
+  />
+
+  {
+    featuredPosts.length > 0 && (
+      <div class="grid grid-cols-1 gap-12">
+        {featuredPosts.map((entry) => {
+          return <Spotlight post={entry} />
+        })}
+      </div>
+    )
+  }
+
+  <div class="grid gap-4 lg:grid-cols-3">
+    {
+      posts.map((entry) => {
+        return <Card post={entry} />
+      })
+    }
+  </div>
+</LandingPageLayout>

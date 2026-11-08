@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content'
+import IntroHeader from '@components/IntroHeader.astro'
+import LandingPageLayout from '@layouts/LandingPage.astro'
+
+import Card from '@components/Card.astro'
+import Spotlight from '@components/Spotlight.astro'
+
+const entries = await getCollection('projects')
+
+const featuredPosts = entries
+  .filter((entry) => entry.data.featured && !entry.data.draft)
+  .sort((a, b) => b.data.year - a.data.year)
+
+const posts = entries.filter(
+  (entry) => !entry.data.featured && !entry.data.draft,
+)
+---
+
+<LandingPageLayout
+  seo_title="Projects"
+  seo_description="A selection of work to showcase low level design principles to technical and functional full-stack development."
+>
+  <IntroHeader
+    title="Projects"
+    description="I'm a full-stack developer and designer based in the Melbourne, Australia 🇦🇺. I work towards creating beautiful and functional websites and applications."
+  />
+
+  {
+    featuredPosts.length > 0 && (
+      <div class="grid grid-cols-1 gap-12">
+        {featuredPosts.map((entry) => {
+          return <Spotlight post={entry} />
+        })}
+      </div>
+    )
+  }
+
+  <section>
+    <ul class="grid gap-8 md:grid-cols-2 md:gap-12 lg:gap-16">
+      {posts.map((post) => <Card post={post} />)}
+    </ul>
+  </section>
+</LandingPageLayout>
