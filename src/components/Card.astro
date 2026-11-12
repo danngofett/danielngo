@@ -6,14 +6,19 @@ import BaseImage from './BaseImage.astro'
 
 interface Props {
   post: CollectionEntry<'travels' | 'projects' | 'blog'>
+  compact?: boolean
 }
 
 const { data, collection } = Astro.props.post
 const isDraft = Astro.props.post.data.draft
+const { compact = false } = Astro.props
 ---
 
 <a
-  class="group relative grid grid-cols-[160px_1fr] gap-4 gap-x-4 rounded-2xl border-4 border-white p-4 hover:outline-2 hover:outline-neutral-700 md:grid-cols-1 md:flex-col md:gap-8 md:p-8 md:py-20 md:pt-8 lg:bg-gray-100 lg:pt-8 dark:border-slate-800 dark:outline-white dark:hover:outline-white dark:lg:bg-gray-800"
+  class:list={[
+    'group relative grid grid-cols-[160px_1fr] gap-4 gap-x-4 rounded-2xl border-4 border-white p-4 hover:outline-2 hover:outline-neutral-700 md:grid-cols-1 md:flex-col md:gap-8 md:p-8 md:py-20 md:pt-8 lg:bg-gray-100 dark:border-slate-800 dark:outline-white dark:hover:outline-white dark:lg:bg-gray-800',
+    compact ? 'lg:gap-5 lg:p-5 lg:pb-10' : 'lg:pt-8',
+  ]}
   href={linkResolver(Astro.props.post)}
 >
   {
@@ -40,11 +45,21 @@ const isDraft = Astro.props.post.data.draft
       )
     }
 
-    <h3 class="text-xl leading-tight text-black md:text-3xl dark:text-white">
+    <h3
+      class:list={[
+        'text-xl leading-tight text-black md:text-3xl dark:text-white',
+        compact && 'lg:text-2xl',
+      ]}
+    >
       {data.title}
     </h3>
 
-    <p class="mt-2 font-normal text-slate-500 md:text-xl dark:text-slate-300">
+    <p
+      class:list={[
+        'mt-2 font-normal text-slate-500 md:text-xl dark:text-slate-300',
+        compact && 'lg:text-base',
+      ]}
+    >
       {data.description}
     </p>
   </div>
@@ -52,7 +67,12 @@ const isDraft = Astro.props.post.data.draft
   <div class="mt-auto hidden md:block">
     {
       !isDraft && (
-        <span class="underline-animation inline-block text-xl font-normal dark:text-white">
+        <span
+          class:list={[
+            'underline-animation inline-block text-xl font-normal dark:text-white',
+            compact && 'lg:text-base',
+          ]}
+        >
           View the {collection === 'travels' ? 'article' : 'project'}
         </span>
       )

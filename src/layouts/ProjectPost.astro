@@ -22,6 +22,7 @@ const {
   featured_image_src,
   tags,
   toc,
+  unlisted,
   headings = [],
 } = Astro.props
 const SEO_TITLE = `${title} | Daniel Ngo`
@@ -29,7 +30,11 @@ const SEO_TITLE = `${title} | Daniel Ngo`
 
 <html lang="en">
   <head>
-    <BaseHead title={SEO_TITLE} description={description} />
+    <BaseHead
+      title={SEO_TITLE}
+      description={description}
+      noindex={unlisted}
+    />
   </head>
 
   <body class="transition duration-500 bg-white dark:bg-slate-900">

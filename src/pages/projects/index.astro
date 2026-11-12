@@ -6,9 +6,9 @@ import LandingPageLayout from '@layouts/LandingPage.astro'
 import Card from '@components/Card.astro'
 import Spotlight from '@components/Spotlight.astro'
 
-// Drafts are listed in `astro dev` only; they are never built for production.
 const entries = (await getCollection('projects')).filter(
-  (entry) => import.meta.env.DEV || !entry.data.draft,
+  (entry) =>
+    import.meta.env.DEV || (!entry.data.draft && !entry.data.unlisted),
 )
 
 const featuredPosts = entries
@@ -20,11 +20,11 @@ const posts = entries.filter((entry) => !entry.data.featured)
 
 <LandingPageLayout
   seo_title="Projects"
-  seo_description="A selection of work to showcase low level design principles to technical and functional full-stack development."
+  seo_description="A selection of full-stack engineering work, from design systems and front ends to APIs and cloud delivery."
 >
   <IntroHeader
     title="Projects"
-    description="I'm a full-stack developer and designer based in the Melbourne, Australia 🇦🇺. I work towards creating beautiful and functional websites and applications."
+    description="I'm a full-stack engineer based in Melbourne, Australia 🇦🇺. I build production-ready systems, from polished front ends and design systems to APIs and cloud delivery."
   />
 
   {
@@ -38,8 +38,8 @@ const posts = entries.filter((entry) => !entry.data.featured)
   }
 
   <section>
-    <ul class="grid gap-8 md:grid-cols-2 md:gap-12 lg:gap-16">
-      {posts.map((post) => <Card post={post} />)}
+    <ul class="grid gap-8 md:grid-cols-2 md:gap-12 lg:grid-cols-3 lg:gap-8">
+      {posts.map((post) => <Card post={post} compact />)}
     </ul>
   </section>
 </LandingPageLayout>

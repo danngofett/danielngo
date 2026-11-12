@@ -6,7 +6,8 @@ featured: true
 toc: true
 # TODO: confirm year
 year: 2026
-draft: true
+draft: false
+unlisted: true
 tags:
   [
     TypeScript,
@@ -24,25 +25,7 @@ tags:
   ]
 ---
 
-{/*
-  PUBLIC REPO: everything in this file, including comments, is visible on GitHub. Keep it high level.
-  Never publish: version numbers, header or endpoint names, database/vendor/infra specifics, internal tool names,
-  security controls beyond "2FA, roles, audit trail", incident stories, or anything copied from internal docs.
-
-  SCREENSHOT PLAN (upload to Cloudinary as projects/trellis/<name>, then uncomment the matching <BaseImage> below)
-  1. featured-image  Customer app: invoice list or dashboard, light mode, seeded demo data. Doubles as the featured image.
-  2. invoice-pay     An invoice with its pay link and QR code. Use a demo invoice and blur or crop the link itself.
-  3. docs-home       docs.mytrellis.io home or a guide with the sidebar visible, light mode.
-  4. docs-guide      One guide page showing the desktop + phone screenshot pair.
-  5. roots           Design system components (crop to the components; no URLs, no environment banners).
-  6. overview        OPTIONAL: a simple hand-drawn diagram (apps, services, data) with no names, ports, vendors or flows. Not the internal diagram.
-  Always demo data. Never capture: the admin app, tenant lists, audit logs, CI or deploy pages, traces, cloud consoles,
-  browser address bars, API docs, or anything showing real customers, URLs, keys or environment names.
-*/}
-
 import NoteText from '@components/NoteText.astro'
-
-{/* When uncommenting any <BaseImage> below, also add: import BaseImage from '@components/BaseImage.astro' */}
 
 # TLDR;
 
@@ -91,11 +74,12 @@ Roots is a Storybook-documented package: shadcn primitives as foundations, compo
 
 {/* <BaseImage src="projects/trellis/roots" alt="Roots design system components" caption="Roots: compound components documented and interaction-tested in Storybook." /> */}
 
-## Decisions worth explaining
+## Key decisions
 
-{/* TODO: confirm each "why" below matches your actual reasoning; drafted from the repo docs, not from you */}
+{/* TODO: confirm each "why" matches your actual reasoning. Keep it short; the long decision records were removed for length. */}
 
-- **Database per customer, provisioned automatically.** Stronger isolation than row-level tenancy, and simple per-customer backup, restore and deletion. The cost is operational: every schema change has to reach every database (see Challenges).
+- **PostgreSQL, not a document store.** Invoicing data is deeply relational and has to stay consistent. A document database is quick to start but made efficient filtering and reporting painful as the product grew, so I chose a relational database that makes new questions a query rather than a restructure.
+- **A database per customer, provisioned automatically.** Stronger isolation than row-level tenancy, and simple per-customer backup, restore and deletion. The cost is operational: every schema change has to reach every database (see Challenges).
 - **Stripe Connect.** Each business keeps its own Stripe account and compliance relationship, funds go straight to them, and card details are handled by Stripe, never by myTrellis. That keeps the product a thin integration rather than a payments company.
 - **Per-customer feature toggles, with who/when change tracking.** Features can be turned on for individual customers, and every change records who made it and when, so behaviour differences between customers can be explained.
 - **Frozen snapshots on documents.** An invoice keeps the client and business details as they were when it was created, so editing an address later never rewrites history.

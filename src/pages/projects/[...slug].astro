@@ -3,7 +3,6 @@ import { type CollectionEntry, getCollection, render } from 'astro:content'
 import ProjectPost from '@layouts/ProjectPost.astro'
 
 export async function getStaticPaths() {
-  // Drafts are previewable in `astro dev` only; they are never built for production.
   const posts = await getCollection(
     'projects',
     ({ data }) => import.meta.env.DEV || !data.draft,

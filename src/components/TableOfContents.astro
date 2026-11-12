@@ -3,13 +3,11 @@ import type { MarkdownHeading } from 'astro'
 
 interface Props {
   headings: MarkdownHeading[]
-  /** `sticky` is the desktop side rail; `inline` is the collapsible mobile version. */
   variant?: 'sticky' | 'inline'
 }
 
 const { headings, variant = 'sticky' } = Astro.props
 
-// h2 and h3 only: the h1 is the page's "TLDR;" and deeper levels add noise.
 const items = headings.filter((h) => h.depth === 2 || h.depth === 3)
 
 const linkClass =
@@ -63,7 +61,6 @@ const linkClass =
       scroll-behavior: auto;
     }
   }
-  /* Keep anchored headings clear of the top edge. */
   .prose :where(h2, h3)[id] {
     scroll-margin-top: 2rem;
   }
@@ -78,7 +75,6 @@ const linkClass =
 </style>
 
 <script>
-  // Highlight the TOC entry for the section currently in view.
   const links = Array.from(
     document.querySelectorAll<HTMLAnchorElement>('nav.toc .toc-link'),
   )
@@ -96,7 +92,6 @@ const linkClass =
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // Of the headings crossing the top band, use the first one in document order.
         const visible = entries
           .filter((e) => e.isIntersecting)
           .map((e) => e.target.id)
