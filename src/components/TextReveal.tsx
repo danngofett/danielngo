@@ -1,6 +1,8 @@
 import React from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { animated, useReducedMotion, useTransition } from '@react-spring/web'
+
+const AnimatedSpan = animated('span')
 
 export interface TextRevealProps {
   className?: string
@@ -18,20 +20,19 @@ export const TextReveal = ({
   const reducedMotion = useReducedMotion()
 
   const [index, setIndex] = useState(0)
-  const containerRef = useRef<HTMLDivElement | null>(null)
-  const wordRef = useRef<HTMLSpanElement | null>(null)
+  const measureRefs = useRef<(HTMLSpanElement | null)[]>([])
+  const [widths, setWidths] = useState<number[]>([])
 
   const currentWord = words[index]
 
-  const updateWordSpacer = () => {
-    if (wordRef.current && containerRef.current) {
-      const wordWidth = wordRef.current.offsetWidth
-      const wordHeight = wordRef.current.offsetHeight
-
-      containerRef.current.style.width = `${wordWidth}px`
-      containerRef.current.style.height = `${wordHeight}px`
-    }
-  }
+  useLayoutEffect(() => {
+    const measure = () =>
+      setWidths(measureRefs.current.map((el) => el?.offsetWidth ?? 0))
+    measure()
+    document.fonts?.ready.then(measure)
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [words])
 
   const transitions = useTransition(currentWord, {
     from: {
@@ -40,7 +41,6 @@ export const TextReveal = ({
     },
     enter: { opacity: 1, transform: 'translateY(0px)' },
     leave: { opacity: 0, transform: 'translateY(-50px)' },
-    onDestroyed: updateWordSpacer,
   })
 
   useEffect(() => {
@@ -58,33 +58,44 @@ export const TextReveal = ({
     return () => clearInterval(interval)
   }, [words.length, duration, delay, reducedMotion])
 
-  const AnimatedSpan = animated('span')
-
   return (
     <div
       className={` ${className || ''} relative block overflow-hidden bg-transparent whitespace-nowrap min-[440px]:inline-block`}
-      ref={containerRef}
+      style={widths[index] ? { width: `${widths[index]}px` } : undefined}
     >
-      {transitions((style, item) => (
-        <React.Fragment key={item}>
-          <AnimatedSpan
-            className="absolute bottom-0 left-0 inline-block w-full text-black dark:text-white"
-            style={{
-              opacity: style.opacity,
-              transform: style.transform,
-            }}
-          >
-            {item}
-          </AnimatedSpan>
+      {/* Invisible, in-flow spacer: reserves line height only */}
+      <span
+        className="pointer-events-none inline-block text-transparent select-none"
+        aria-hidden
+      >
+        &nbsp;
+      </span>
 
-          <span
-            className="pointer-events-none inline-block text-transparent select-none"
-            ref={wordRef}
-            aria-hidden
-          >
-            {item}
-          </span>
-        </React.Fragment>
+      {/* Off-flow measurers for every word */}
+      {words.map((word, i) => (
+        <span
+          key={word}
+          ref={(el) => {
+            measureRefs.current[i] = el
+          }}
+          className="pointer-events-none invisible absolute top-0 left-0 inline-block select-none"
+          aria-hidden
+        >
+          {word}
+        </span>
+      ))}
+
+      {transitions((style, item) => (
+        <AnimatedSpan
+          key={item}
+          className="absolute bottom-0 left-0 inline-block w-full text-black dark:text-white"
+          style={{
+            opacity: style.opacity,
+            transform: style.transform,
+          }}
+        >
+          {item}
+        </AnimatedSpan>
       ))}
     </div>
   )

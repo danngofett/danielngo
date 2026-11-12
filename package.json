@@ -24,6 +24,7 @@
     "@astrojs/rss": "4.0.19",
     "@astrojs/sitemap": "3.7.4",
     "@astrojs/ts-plugin": "1.10.12",
+    "@lucide/astro": "^1.72.0",
     "@react-spring/web": "10.1.2",
     "@tailwindcss/postcss": "4.3.5",
     "@tailwindcss/vite": "4.3.5",

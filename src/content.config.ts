@@ -28,6 +28,8 @@ const projects = defineCollection({
     featured: z.boolean(),
     tags: z.array(z.string()).optional(),
     draft: z.boolean(),
+    // Show a sticky "On this page" table of contents (opt-in, for long pages).
+    toc: z.boolean().default(false),
   }),
 })
 

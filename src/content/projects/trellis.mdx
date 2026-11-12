@@ -1,0 +1,175 @@
+---
+title: myTrellis
+description: A multi-tenant invoicing SaaS for sole traders and small businesses - simplifying quote to invoices with payment reminders and workflow automation.
+featured_image_alt: myTrellis
+featured: true
+toc: true
+# TODO: confirm year
+year: 2026
+draft: true
+tags:
+  [
+    TypeScript,
+    NestJS,
+    React,
+    Prisma,
+    PostgreSQL,
+    Multi-tenant SaaS,
+    Stripe Connect,
+    Google Cloud,
+    Terraform,
+    GitHub Actions,
+    Next.js,
+    Fumadocs,
+  ]
+---
+
+{/*
+  PUBLIC REPO: everything in this file, including comments, is visible on GitHub. Keep it high level.
+  Never publish: version numbers, header or endpoint names, database/vendor/infra specifics, internal tool names,
+  security controls beyond "2FA, roles, audit trail", incident stories, or anything copied from internal docs.
+
+  SCREENSHOT PLAN (upload to Cloudinary as projects/trellis/<name>, then uncomment the matching <BaseImage> below)
+  1. featured-image  Customer app: invoice list or dashboard, light mode, seeded demo data. Doubles as the featured image.
+  2. invoice-pay     An invoice with its pay link and QR code. Use a demo invoice and blur or crop the link itself.
+  3. docs-home       docs.mytrellis.io home or a guide with the sidebar visible, light mode.
+  4. docs-guide      One guide page showing the desktop + phone screenshot pair.
+  5. roots           Design system components (crop to the components; no URLs, no environment banners).
+  6. overview        OPTIONAL: a simple hand-drawn diagram (apps, services, data) with no names, ports, vendors or flows. Not the internal diagram.
+  Always demo data. Never capture: the admin app, tenant lists, audit logs, CI or deploy pages, traces, cloud consoles,
+  browser address bars, API docs, or anything showing real customers, URLs, keys or environment names.
+*/}
+
+import NoteText from '@components/NoteText.astro'
+
+{/* When uncommenting any <BaseImage> below, also add: import BaseImage from '@components/BaseImage.astro' */}
+
+# TLDR;
+
+- **Role**: Sole designer and engineer
+  {/* TODO: confirm this still holds now that it is a team venture. If partners cover product, sales or ops, say so here, e.g. "Lead engineer and designer". */}
+- **Team**: Me and a few business partners
+  {/* TODO: add each partner's focus if you want (e.g. product, sales, operations). */}
+- **Status**: Business venture with partners, in closed alpha
+- **Stack**: TypeScript monorepo with NestJS APIs, React front ends and PostgreSQL via Prisma, running on Google Cloud and delivered with Terraform and GitHub Actions. Public site and docs in Next.js and Fumadocs
+- **Scale**: A customer app and an internal admin app, each with its own API, plus a monitoring job, a shared design system and a public site with documentation
+
+{/* TODO: check with your partners that everything below is okay to share publicly before setting draft to false. */}
+
+---
+
+## The problem and who it's for
+
+myTrellis is a multi-tenant invoicing SaaS for sole traders and small businesses.
+
+{/* TODO: 1 sentence on the specific problem it solves for them. What is wrong with the tools they use today? */}
+
+It is built like enterprise software (tenant isolation, audit trails, tested restores, controlled releases) because small businesses still deserve their financial data to be treated carefully.
+
+## What I built
+
+Two products on one platform:
+
+- **Customer app**: where each business manages clients, quotes, invoices, recurring invoices, expenses and reporting, and gets paid online with a pay link and QR code.
+- **Admin app**: internal tooling for operating the product and supporting customers.
+
+Around them sit a monitoring job, a shared design system (Roots) with platform-neutral design tokens, and an early mobile app.
+
+{/* <BaseImage src="projects/trellis/featured-image" alt="myTrellis invoice dashboard" caption="The customer app, running on demo data." /> */}
+
+## Architecture
+
+Shared application servers, one PostgreSQL database per customer, and a small shared service that keeps track of which customer is which. Every request is scoped to a single customer before any data is touched.
+
+### Typed end to end
+
+Schemas are shared between the back end and the front ends, and the front ends consume generated, typed API clients. A change to an API surfaces as a compile error in the apps rather than a bug in production, and both APIs respond in one consistent shape.
+
+### Design system
+
+Roots is a Storybook-documented package: shadcn primitives as foundations, compound components (forms, data, tags, status, media, navigation) on top, and a tokens package that generates both the web CSS and a mobile theme so every surface shares the same visual language.
+
+{/* <BaseImage src="projects/trellis/roots" alt="Roots design system components" caption="Roots: compound components documented and interaction-tested in Storybook." /> */}
+
+## Decisions worth explaining
+
+{/* TODO: confirm each "why" below matches your actual reasoning; drafted from the repo docs, not from you */}
+
+- **Database per customer, provisioned automatically.** Stronger isolation than row-level tenancy, and simple per-customer backup, restore and deletion. The cost is operational: every schema change has to reach every database (see Challenges).
+- **Stripe Connect.** Each business keeps its own Stripe account and compliance relationship, funds go straight to them, and card details are handled by Stripe, never by myTrellis. That keeps the product a thin integration rather than a payments company.
+- **Per-customer feature toggles, with who/when change tracking.** Features can be turned on for individual customers, and every change records who made it and when, so behaviour differences between customers can be explained.
+- **Frozen snapshots on documents.** An invoice keeps the client and business details as they were when it was created, so editing an address later never rewrites history.
+- **CSV import with validation preview and rollback.** Users see what will change before data is committed and can undo an import.
+- **Scheduled automation for reminders and recurring invoices.** Overdue invoices and expiring quotes are handled by scheduled jobs rather than relying on users to remember.
+
+## Challenges
+
+### Schema changes across many databases
+
+With one database per customer, "run the migration" is not one operation. A change is only live once it has reached every customer's database, and the release has to fail safely if any of them does not. I designed around the usual traps: changes follow an expand-and-contract pattern so old and new code can briefly coexist, and risky changes are split into small, reversible steps.
+
+### Payments in an isolated-data world
+
+External payment events do not know about our customer boundaries. Mapping them back to the right customer without weakening isolation meant treating every inbound event as untrusted until verified, making processing safe to repeat, and reconciling anything that was missed.
+
+{/* <BaseImage src="projects/trellis/invoice-pay" alt="Invoice with pay link and QR code" caption="Each invoice has a pay link and QR code, settled through the business's own Stripe account." /> */}
+
+### Provisioning that fails safely
+
+Creating a customer means creating and preparing a database, which can fail halfway. Provisioning has explicit failure states, automatic retries and alerting, so a bad signup is visible and recoverable instead of silent.
+
+### Recovering one customer
+
+Whole-platform recovery tools cannot restore a single customer without touching the others. Per-customer backups, restored into an isolated environment first and reviewed before anything goes live, make recovery precise and low risk.
+
+## Governance and security
+
+- Two-factor authentication, role-based access and an audit trail of administrative actions.
+- Secrets are kept out of the codebase.
+
+{/* TODO: keep this section deliberately short. Do not add specifics about access controls, network restrictions or admin tooling. */}
+
+## Delivery
+
+CI/CD runs on GitHub Actions to Google Cloud, with infrastructure defined as code in Terraform.
+
+- **Automated gates.** Every change runs through automated tests before it can be released.
+- **Deploy is not release.** Production changes are deployed, health-checked and then deliberately promoted by a person.
+- **Safe by default.** Backups are required before risky changes.
+
+## Quality and observability
+
+- **Tests**: unit and integration tests, interaction tests for the design system, and end-to-end and visual regression tests, with a coverage floor enforced in CI.
+- **Observability**: distributed tracing and error monitoring across the apps and APIs.
+- **Monitoring job**: a scheduled job that checks platform health and alerts the team.
+
+## Public site and documentation
+
+Alongside the product sits a second monorepo for everything public-facing. Two Next.js apps share a small UI package and a single source of truth for URLs.
+
+- **[mytrellis.io](https://mytrellis.io)**: the marketing site. Today it is a deliberate holding page (logo, light and dark theme, a link to the docs) while the product is in alpha. {/* TODO: update when the real marketing site ships, or drop this bullet if you would rather not mention the holding page. */}
+- **[docs.mytrellis.io](https://docs.mytrellis.io)**: the product documentation, built with Fumadocs. It is written as a step-by-step alpha user guide for non-technical testers: getting started, core tasks (clients, quotes, invoices, line items, expenses), getting paid (online payments, reminders, recording payments), importing data from CSV, and going further (reports, recurring invoices, branding).
+
+A few details I'm happy with:
+
+- **Screenshots as a component.** Each guide embeds one component that shows a desktop and a phone capture side by side with click-to-zoom. Captures are converted to WebP by a script, so pages stay light without anyone thinking about it.
+- **Task-shaped content.** Every page starts from something a business owner is trying to do, not from a feature name. Search keywords and icons are set per page, and the CSV import guides include downloadable template cards.
+- **Same engineering standards as the product.** Conventional Commits enforced by commitlint and husky, linting and formatting in CI, a coverage floor, and Storybook for the shared UI package.
+
+{/* <BaseImage src="projects/trellis/docs-home" alt="myTrellis documentation site" caption="docs.mytrellis.io: a Fumadocs site written as a task-based alpha user guide." /> */}
+{/* <BaseImage src="projects/trellis/docs-guide" alt="A myTrellis guide page with desktop and phone screenshots" caption="Each guide pairs a desktop and a phone capture, with click-to-zoom." /> */}
+
+Two more pieces round out the documentation:
+
+- **myTrellis Atlas** is a living feature directory written for non-engineers, so anyone can see what the product does without reading code. {/* TODO: link to Atlas */}
+- **Engineering docs** are written as decision records: they state the choice, the alternatives rejected and the trade-offs. They are internal.
+
+## What I learned
+
+{/* TODO: 2 to 4 honest takeaways in your own words. Suggested angles: what multi-tenancy costs operationally, designing for the failure case first, documenting trade-offs as part of the design. */}
+
+## What's next: my first AI agent
+
+<NoteText text="In progress. This agent is not built yet." color="yellow" />
+
+{/* TODO: describe the first agent (e.g. receipt extraction or overdue-reminder drafting with human approval) and the eval approach. Do not describe as built until shipped. */}

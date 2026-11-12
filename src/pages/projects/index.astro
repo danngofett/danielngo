@@ -6,15 +6,16 @@ import LandingPageLayout from '@layouts/LandingPage.astro'
 import Card from '@components/Card.astro'
 import Spotlight from '@components/Spotlight.astro'
 
-const entries = await getCollection('projects')
+// Drafts are listed in `astro dev` only; they are never built for production.
+const entries = (await getCollection('projects')).filter(
+  (entry) => import.meta.env.DEV || !entry.data.draft,
+)
 
 const featuredPosts = entries
-  .filter((entry) => entry.data.featured && !entry.data.draft)
+  .filter((entry) => entry.data.featured)
   .sort((a, b) => b.data.year - a.data.year)
 
-const posts = entries.filter(
-  (entry) => !entry.data.featured && !entry.data.draft,
-)
+const posts = entries.filter((entry) => !entry.data.featured)
 ---
 
 <LandingPageLayout

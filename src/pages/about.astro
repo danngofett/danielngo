@@ -5,12 +5,96 @@ import { Content as Bio } from '@content/about/bio.mdx'
 import Icon from '@components/Icon.astro'
 import IntroHeader from '@components/IntroHeader.astro'
 import BaseImage from '@components/BaseImage.astro'
+import {
+  Cloud,
+  Code,
+  Database,
+  Eye,
+  FlaskConical,
+  Layers,
+  Plug,
+  Users,
+} from '@lucide/astro'
 
 import { getCollection, render } from 'astro:content'
 
 const rolesEntries = (await getCollection('roles')).sort(
   (a, b) => b.data.order - a.data.order,
 )
+
+// TODO: add Python to "Languages and frameworks" once confirmed
+// TODO: add LLM evals to "Quality" once built
+// TODO: add an "AI and agents" group once you confirm what to list
+const SKILL_GROUPS = [
+  {
+    title: 'Cloud and delivery',
+    icon: Cloud,
+    skills: [
+      'GCP',
+      'Cloud Run',
+      'IAM and Secret Manager',
+      'Artifact Registry',
+      'Terraform',
+      'Docker',
+      'Vercel',
+      'CI/CD (Jenkins, Bitbucket Pipelines, GitHub Actions)',
+    ],
+  },
+  {
+    title: 'CMS and platforms',
+    icon: Layers,
+    skills: [
+      'Squiz Matrix',
+      'Shopify',
+      'Contentful',
+      'Prismic',
+      'Sanity.io',
+      'WordPress',
+      'Liquid',
+      'Analytics and Google Tag Manager',
+    ],
+  },
+  {
+    title: 'Leadership',
+    icon: Users,
+    skills: [
+      'Leading small and large teams',
+      'Technical communication and documentation',
+      'Managing and resolving client P1 risks',
+      'One-on-ones and performance reviews',
+      'Mentorship and paired programming',
+    ],
+  },
+  {
+    title: 'Integration',
+    icon: Plug,
+    skills: [
+      'REST and GraphQL API consumption and design',
+      'API and integration analysis',
+      'Enterprise integration (Banner, Salesforce, MuleSoft upstream)',
+    ],
+  },
+  {
+    title: 'Languages and frameworks',
+    icon: Code,
+    skills: ['TypeScript', 'Node.js', 'React', 'React Native', 'Next.js', 'Vue'],
+  },
+  {
+    title: 'Design and accessibility',
+    icon: Eye,
+    skills: ['Design systems (Storybook, Figma)', 'WCAG-led development', 'Adobe Creative Suite (Photoshop, Illustrator, InDesign, After Effects, Lightroom)'],
+  },
+  {
+    title: 'Quality',
+    icon: FlaskConical,
+    skills: ['Playwright', 'Vitest', 'Cypress', 'Jest'],
+  },
+  {
+    title: 'Data',
+    icon: Database,
+    skills: ['PostgreSQL', 'Neon', 'Firestore'],
+  },
+]
 
 const roles = await Promise.all(
   rolesEntries.map(async (entry) => ({
@@ -22,12 +106,12 @@ const roles = await Promise.all(
 
 <LandingPageLayout
   seo_title="About"
-  seo_description="Melbourne-based graphic designer and full-stack developer. Shopify expert, designer, and photography enthusiast."
+  seo_description="Melbourne-based senior engineer with 10+ years shipping software, from e-commerce to enterprise integration. Now building towards AI agents."
   featured_image_src="about/teamlab-fukuoka"
 >
   <IntroHeader
     title="About"
-    description="Hello, I'm Dan and currently residing in Melbourne, Australia 🇦🇺. Today I'm a Senior Front-end Developer at Monash University."
+    description="Hi, I’m Dan 🇦🇺 — early-era web dev in Melbourne, working on enterprise integrations at Monash University and custom web apps for growing businesses. Constantly learning and experimenting."
   />
 
   <div class="flex flex-col gap-24 px-4 py-12">
@@ -41,7 +125,7 @@ const roles = await Promise.all(
           👋 A bit about me
         </h2>
 
-        <div class="mt-6 text-xl dark:text-white">
+        <div class="mt-6 space-y-6 text-xl dark:text-white">
           <Intro />
         </div>
       </div>
@@ -68,168 +152,28 @@ const roles = await Promise.all(
       <div
         class="prose dark:prose-invert col-span-full mt-8 max-w-full md:mt-12 lg:col-span-10 lg:col-start-2 lg:mt-16"
       >
-        <h2>Professional development</h2>
+        <h2>Skills</h2>
 
-        <div class="grid gap-8 md:grid-cols-3">
-          <div>
-            <h3 class="text-primary dark:text-white">Design Expertise</h3>
-            <ul>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Design Systems:</strong
-                >
-                <span class="prose-sm">
-                  Creating design systems using Storybook.</span
-                >
-              </li>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Typography:</strong
-                >
-                <span class="prose-sm"
-                  >Established fundamentals of typography design.</span
-                >
-              </li>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Publication Design:</strong
-                >
-                <span class="prose-sm">
-                  Experienced in designing for publications and print-based
-                  media.</span
-                >
-              </li>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Motion Design:</strong
-                >
-                <span class="prose-sm"
-                  >Proficient in animation using Adobe After Effects.</span
-                >
-              </li>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Digital prototyping:</strong
-                >
-                <span class="prose-sm"
-                  >Expertise in Figma, Sketch, and Invision.</span
-                >
-              </li>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Adobe Suite:</strong
-                >
-                <span class="prose-sm">
-                  Proficient in Adobe Photoshop, Illustrator, and InDesign.
-                </span>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-primary dark:text-white">Leadership Skills</h3>
-            <ul>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Team Leadership:</strong
-                >
-                <span class="prose-sm">
-                  Experienced in leading both small and large development teams.
-                </span>
-              </li>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Technical Communication:</strong
-                >
-                <span class="prose-sm">
-                  Skilled in technical communication and documentation.
-                </span>
-              </li>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Risk Management:</strong
-                >
-                <span class="prose-sm">
-                  Managing and resolving high-priority (P1) client risks.
-                </span>
-              </li>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Performance Management:</strong
-                >
-                <span class="prose-sm">
-                  Conducted one-on-one meetings and performance reviews.
-                </span>
-              </li>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Mentorship:</strong
-                >
-                <span class="prose-sm">
-                  Offered mentorship and engaged in paired programming
-                  practices.
-                </span>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-primary dark:text-white">Technical Proficiency</h3>
-            <ul>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Programming Languages:</strong
-                >
-                <span class="prose-sm">
-                  Skilled in Vanilla JS and TypeScript.</span
-                >
-              </li>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Frameworks:</strong
-                >
-                <span class="prose-sm">
-                  React, Next.js, Vue.js, Nuxt, Astro, and Lit.</span
-                >
-              </li>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Back-End Development:</strong
-                >
-                <span class="prose-sm"> Experienced in Node.js.</span>
-              </li>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Web Development:</strong
-                >
-                <span class="prose-sm"
-                  >HTML, Liquid, CSS, SASS, and PostCSS.</span
-                >
-              </li>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Content Management Systems:</strong
-                >
-                <span class="prose-sm">
-                  Shopify, Contentful, Prismic, Sanity.io, and WordPress.
-                </span>
-              </li>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >API Integration:</strong
-                >
-                <span class="prose-sm">GraphQL and REST APIs.</span>
-              </li>
-              <li>
-                <strong class="text-primary block dark:text-white"
-                  >Testing Tools:</strong
-                >
-                <span class="prose-sm"
-                  >Playwright, Vitest, Cypress, and Jest.</span
-                >
-              </li>
-            </ul>
-          </div>
+        <div class="grid gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-4">
+          {
+            SKILL_GROUPS.map((group) => (
+              <div>
+                <h3 class="text-primary mt-0 mb-3 flex items-center gap-2 text-base font-semibold dark:text-white">
+                  <group.icon
+                    aria-hidden="true"
+                    class="size-5 shrink-0"
+                    stroke-width={1.5}
+                  />
+                  {group.title}
+                </h3>
+                <ul class="prose-sm m-0 list-disc space-y-1 pl-5">
+                  {group.skills.map((skill) => (
+                    <li class="m-0">{skill}</li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
         </div>
       </div>
 
