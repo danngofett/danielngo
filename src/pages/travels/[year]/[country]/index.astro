@@ -5,7 +5,7 @@ import BaseImage from '@components/BaseImage.astro'
 import Container from '@components/Container.astro'
 
 import TravelPost from '@layouts/TravelPost.astro'
-import { dateFormatter } from '@helpers/date-formatter'
+import { dateFormatter } from '@utils/date-formatter'
 
 export async function getStaticPaths() {
   const entries = await getCollection('travels')
@@ -25,7 +25,7 @@ const { entry } = Astro.props
 
 const timeline = await getCollection('timeline').then((day) => {
   return day
-    .filter((item) => item.data.country === entry.data.country)
+    .filter((item) => item.id.startsWith(`${entry.id}/`))
     .sort((a, b) => a.data.day - b.data.day)
 })
 

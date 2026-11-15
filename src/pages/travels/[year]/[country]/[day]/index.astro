@@ -6,7 +6,7 @@ import BaseImage from '@components/BaseImage.astro'
 import Container from '@components/Container.astro'
 
 import type { InferGetStaticPropsType, GetStaticPaths } from 'astro'
-import { dateFormatter } from '@helpers/date-formatter'
+import { dateFormatter } from '@utils/date-formatter'
 
 export const getStaticPaths = (async () => {
   const timeline = await getCollection('timeline')
