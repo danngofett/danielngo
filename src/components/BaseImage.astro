@@ -25,10 +25,10 @@ const {
   loading = 'lazy',
 } = Astro.props
 
+// Building a delivery URL only needs the cloud name; never add the API key or
+// secret here.
 cloudinary.config({
   cloud_name: import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: import.meta.env.PUBLIC_CLOUDINARY_API_KEY,
-  api_secret: import.meta.env.PUBLIC_CLOUDINARY_API_SECRET,
 })
 
 const imageSrc = cloudinary.url(src, {
