@@ -14,6 +14,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "cloudinary:rename": "node scripts/rename.mjs travels/ukraine"
   },
   "dependencies": {
