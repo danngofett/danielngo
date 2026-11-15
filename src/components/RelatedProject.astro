@@ -1,0 +1,28 @@
+---
+import { getEntry } from 'astro:content'
+import Card from './Card.astro'
+
+interface Props {
+  /** Project ids, i.e. filenames without the extension. */
+  slugs: string[]
+}
+
+const posts = (
+  await Promise.all(Astro.props.slugs.map((slug) => getEntry('projects', slug)))
+).filter((post) => post !== undefined)
+---
+
+{
+  posts.length > 0 && (
+    <ul
+      class:list={[
+        'not-prose mt-6 grid list-none grid-cols-1 gap-8 p-0',
+        posts.length > 1 && 'md:grid-cols-2',
+      ]}
+    >
+      {posts.map((post) => (
+        <Card post={post} compact />
+      ))}
+    </ul>
+  )
+}

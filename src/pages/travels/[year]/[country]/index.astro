@@ -42,7 +42,7 @@ const { Content } = await render(entry)
         class="flex items-center gap-2 py-8 md:py-16 lg:py-32 dark:text-white"
       >
         <Icon icon="arrow" className="h-6 w-6 rotate-90 transform" />
-        <a href="/travels" class="relative -top-[1px]">Back to travels</a>
+        <a href="/travels" class="relative -top-px">Back to travels</a>
       </div>
     </div>
 
@@ -89,7 +89,7 @@ const { Content } = await render(entry)
                   class="flex items-center gap-4 px-4 py-2 transition-shadow rounded-lg shadow-md outline-slate-500 hover:shadow-lg hover:outline-2 dark:bg-slate-800 dark:hover:outline-white"
                 >
                   {item.data.featured_image_src && (
-                    <div class="relative flex-shrink-0 w-12 h-12 bg-gray-200 rounded-full">
+                    <div class="relative shrink-0 w-12 h-12 bg-gray-200 rounded-full">
                       <BaseImage
                         src={item.data.featured_image_src}
                         alt={item.data.featured_image_alt || ''}

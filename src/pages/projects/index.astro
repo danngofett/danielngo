@@ -7,13 +7,19 @@ import Card from '@components/Card.astro'
 import Spotlight from '@components/Spotlight.astro'
 
 const entries = (await getCollection('projects')).filter(
-  (entry) =>
-    import.meta.env.DEV || (!entry.data.draft && !entry.data.unlisted),
+  (entry) => import.meta.env.DEV || (!entry.data.draft && !entry.data.unlisted),
 )
 
 const featuredPosts = entries
   .filter((entry) => entry.data.featured)
   .sort((a, b) => b.data.year - a.data.year)
+
+const fullSpotlights = featuredPosts.filter(
+  (entry) => entry.data.spotlight === 'full',
+)
+const halfSpotlights = featuredPosts.filter(
+  (entry) => entry.data.spotlight !== 'full',
+)
 
 const posts = entries.filter((entry) => !entry.data.featured)
 ---
@@ -24,22 +30,30 @@ const posts = entries.filter((entry) => !entry.data.featured)
 >
   <IntroHeader
     title="Projects"
-    description="I'm a full-stack engineer based in Melbourne, Australia 🇦🇺. I build production-ready systems, from polished front ends and design systems to APIs and cloud delivery."
+    description="I'm a full-stack engineer based in Melbourne, Australia 🇦🇺. I build production-ready systems, from  frontend apps and design systems to APIs and cloud delivery."
   />
 
-  {
-    featuredPosts.length > 0 && (
-      <div class="grid grid-cols-1 gap-12">
-        {featuredPosts.map((entry) => {
-          return <Spotlight post={entry} />
-        })}
-      </div>
-    )
-  }
+  {fullSpotlights.length > 0 && (
+    <div class="grid grid-cols-1 gap-8 lg:gap-12">
+      {fullSpotlights.map((entry) => (
+        <Spotlight post={entry} />
+      ))}
+    </div>
+  )}
+
+  {halfSpotlights.length > 0 && (
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
+      {halfSpotlights.map((entry) => (
+        <Spotlight post={entry} stacked />
+      ))}
+    </div>
+  )}
 
   <section>
     <ul class="grid gap-8 md:grid-cols-2 md:gap-12 lg:grid-cols-3 lg:gap-8">
-      {posts.map((post) => <Card post={post} compact />)}
+      {posts.map((post) => (
+        <Card post={post} compact />
+      ))}
     </ul>
   </section>
 </LandingPageLayout>

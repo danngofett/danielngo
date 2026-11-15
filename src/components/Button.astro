@@ -8,13 +8,13 @@ interface ButtonProps {
 const { href, onClick, variant = 'primary' } = Astro.props as ButtonProps
 
 const base =
-  'text-inverse focus-ring bg-inverse group inline-block transform items-center justify-center space-x-5 whitespace-nowrap rounded-full border-2 px-11 py-6 text-lg font-normal transition duration-200 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 focus:outline-none'
+  'text-inverse focus-ring bg-inverse group relative inline-block transform items-center justify-center space-x-5 whitespace-nowrap rounded-full border-2 px-11 py-6 text-lg font-normal transition duration-200 focus:outline-none'
 
 const variants = {
   primary:
-    'border-black bg-black text-white hover:border-neutral-800 hover:bg-neutral-800 dark:border-white dark:bg-white dark:text-black dark:hover:border-neutral-200 dark:hover:bg-neutral-200',
+    'border-shimmer [--shimmer-width:3px] [--shimmer-radius:9999px] border-black bg-black text-white hover:border-neutral-800 hover:bg-neutral-800 dark:border-white dark:bg-white dark:text-black dark:hover:border-neutral-200 dark:hover:bg-neutral-200',
   secondary:
-    'border-black bg-white text-black hover:bg-black hover:text-white dark:border-white dark:bg-transparent dark:text-white dark:hover:bg-white dark:hover:text-black',
+    'hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 border-black bg-white text-black hover:bg-black hover:text-white dark:border-white dark:bg-transparent dark:text-white dark:hover:bg-white dark:hover:text-black',
 }
 
 const styles = `${base} ${variants[variant]}`

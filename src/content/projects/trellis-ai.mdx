@@ -1,0 +1,128 @@
+---
+title: myTrellis AI
+description: Two AI features for myTrellis - an MCP server so AI assistants can draft invoices on a user's behalf, and an invoice scanner that turns a PDF or photo into a reviewable draft.
+featured_image_alt: myTrellis AI
+featured: true
+toc: true
+year: 2026
+draft: false
+unlisted: true
+tags:
+  [
+    TypeScript,
+    NestJS,
+    MCP,
+    OAuth,
+    Google ADK,
+    Vertex AI,
+    Gemini,
+    React,
+    Prisma,
+    Google Cloud,
+  ]
+---
+
+# TLDR;
+
+- **Role**: Sole designer and engineer
+- **Product**: [myTrellis](/projects/trellis), a multi-tenant invoicing SaaS for sole traders and small businesses
+- **Stack**: NestJS, the MCP TypeScript SDK, OAuth, Google ADK and Gemini on Vertex AI, React, Prisma and PostgreSQL
+- **Principle**: Transparent usage of AI with human-in-the-loop processes
+
+---
+
+## Overview
+
+Our primary concerns of using myTrellis client records and financial data were carefully considered. Adding AI meant that our data is being processed by remote servers and so we needed to ensure that:
+
+1. Our data will only processed and stored in Australian servers
+2. The scope of which our AI agents have access to is limited
+3. Responsible storage of unused data
+
+Both our features answer it the same way. The model gets narrow, audited access, and the only way anything is created is as a **draft** or through a **human review step**.
+
+- **MCP server**: lets a user's own AI assistant work inside their myTrellis workspace. Ask "draft an invoice for Acme for the website work in March" and the assistant finds the client, reuses saved line items and creates a draft.
+- **Invoice scanner**: upload a PDF or photo of an invoice issued elsewhere and get an editable draft that matches the normal invoice form, ready to review and approve.
+
+{/* <BaseImage src="projects/trellis-ai/overview" alt="An AI assistant drafting an invoice in myTrellis" caption="An assistant drafting an invoice through the MCP server." /> */}
+
+## Part 1: An MCP server for AI agents
+
+### What it does
+
+The Model Context Protocol (MCP) is an open standard for giving AI assistants tools. I added an MCP endpoint to the existing API, so a user can connect their assistant once and have it help inside their workspace.
+
+- **Read**: workspace details, clients, saved line items and invoices.
+- **Write**: create and edit **draft** invoices. Nothing is sent, issued or paid by an agent.
+- **Visible**: a draft made by an agent is labelled as such in the app, so nobody mistakes it for something a colleague wrote.
+
+### Authorisation was the real work
+
+The tools are thin wrappers over services that already existed. The hard part was deciding who an agent is and what it may do, because an AI client is not a normal logged-in user.
+
+- **Standard, open authorisation.** Assistants connect through an established OAuth flow rather than a custom scheme, so the security model is one that is widely reviewed and understood.
+- **Explicit consent.** The user chooses which workspace an assistant may use and which kinds of action it is allowed, and can see and remove every connection from Settings.
+- **Least privilege.** An agent never has more authority than the person it acts for, and its access follows that person's role as it changes.
+- **Revocable on the spot.** Disconnecting an assistant takes effect straight away.
+- **Audited.** Every action an agent takes is recorded, attributed to the agent.
+
+{/* <BaseImage src="projects/trellis-ai/consent" alt="Agent consent screen" caption="The consent screen: which assistant, which workspace and which permissions." /> */}
+
+### Decisions worth noting
+
+- **Draft-only writes.** The cost of a wrong draft is a click to delete it. The cost of a wrong sent invoice is a customer relationship, so agents start where mistakes are cheap.
+- **Same code path as the app.** Tools call existing services rather than a second implementation, so validation, numbering and tenant isolation behave exactly as they do in the UI and cannot drift apart.
+- **Humans stay accountable.** The person remains responsible for what gets sent, and the app makes agent involvement visible.
+
+## Part 2: AI invoice scan
+
+### What it does
+
+A business moving to myTrellis usually has years of invoices sitting in PDFs and phone photos. Re-keying them is tedious and error-prone. The scanner reads a document into a draft, and the user reviews it side by side with the original before anything is created.
+
+The import page takes a CSV, PDF or photo in one drop zone and shows both kinds of import in a single history.
+
+{/* <BaseImage src="projects/trellis-ai/scan-review" alt="Side by side scan review page" caption="The review page: the original beside the same form used to create invoices, with uncertain fields outlined." /> */}
+
+### How it works
+
+1. **Prepare the file.** Uploads are checked and cleaned before anything reads them.
+2. **Extract.** A Google ADK pipeline on Gemini reads the document into a structured invoice, and a second reviewing agent matches the client and line items against existing records using read-only lookups.
+3. **Check in code.** Totals, tax and dates are always calculated by deterministic code, never trusted from the model. Anything that does not add up becomes a visible warning.
+4. **Review.** The person edits the draft in the normal invoice form. Fields the model was unsure about are highlighted, and a summary shows the warnings and where each value was read from.
+5. **Approve.** Only on approval is the invoice created, through the same path as CSV import, so the existing undo for imports covers scans too.
+
+The agent has no ability to write data. Only the reviewer's approved submission creates anything, so a confused or manipulated model cannot create records on its own.
+
+### Designed around privacy and cost
+
+- **Australian data residency.** Processing stays in Australia, and the model is pinned to a specific version rather than a moving alias, so behaviour and data location do not change silently.
+- **Documents are short-lived.** Originals are kept only as long as the review needs and then deleted.
+- **Content is never logged.** Operational logs record that a scan happened and how it performed, not what was in it.
+- **Cost is visible.** Each scan records the model, prompt version and usage, usage is capped per customer, and the admin console shows estimated spend.
+
+### Measuring it instead of trusting it
+
+The scanner has two interchangeable engines behind one interface: the two-agent ADK pipeline and a single structured call with plain code for matching. An evaluation script runs either one over a set of realistic fixtures and reports field accuracy, latency and cost per scan.
+
+The question is not only "does it work" but "does the extra agent earn its cost over a single call", and the answer informs how I build the next AI feature. The success bar was set up front: at least 95% accuracy on total, issue date and invoice number, every mismatched total flagged, and a median cost under A$0.15 per scan.
+
+{/* TODO: add the actual eval results once you have run them against the fixtures. Do not claim numbers until then. */}
+
+## Challenges
+
+### Giving an agent a limited identity
+
+Existing auth assumes a person at a keyboard. An agent acts for a person, with less authority, for a limited time, and must be revocable on the spot. Treating the agent as its own kind of actor, rather than a person with a different password, kept the model clear.
+
+### Trusting the model with words, not numbers
+
+Models are good at reading messy documents and unreliable at arithmetic. Splitting the job so the model extracts and code verifies meant a wrong total becomes a flagged warning rather than a silently wrong invoice.
+
+### Keeping the human in the loop without making it painful
+
+A review step only works if it is quick. Reusing the normal invoice form, highlighting only the uncertain fields and showing the original alongside keeps review to a glance rather than a re-entry.
+
+## What I learned
+
+{/* TODO: 2 to 4 honest takeaways in your own words. Suggested angles: authorisation is the hard part of agent features, drafts are a good trust boundary, evals before architecture, deterministic checks around a model. */}

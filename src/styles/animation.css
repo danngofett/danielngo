@@ -19,3 +19,72 @@
   translate: 0 0;
   opacity: 1;
 }
+
+/* Hover shimmer: a coloured arc with a soft glow circles an element's border.
+   Needs `position: relative`. Defaults suit a 4px border with rounded-2xl
+   corners. For other shapes set --shimmer-width (border width) and
+   --shimmer-radius (corner radius) on the element. */
+@property --shimmer-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.border-shimmer::before,
+.border-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: calc(var(--shimmer-width, 4px) * -1);
+  padding: var(--shimmer-width, 4px);
+  border-radius: var(--shimmer-radius, 1rem);
+  background: conic-gradient(
+    from var(--shimmer-angle),
+    transparent 0deg,
+    transparent 220deg,
+    #6366f1 290deg,
+    #22d3ee 335deg,
+    transparent 360deg
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: border-shimmer-spin 2s linear infinite;
+}
+
+.border-shimmer::after {
+  filter: blur(8px);
+}
+
+.border-shimmer:hover::before,
+.border-shimmer:hover::after,
+.border-shimmer:focus-visible::before,
+.border-shimmer:focus-visible::after {
+  opacity: 1;
+}
+
+/* Accordions: no shimmer while open, so it doesn't distract from reading. */
+.border-shimmer[open]::before,
+.border-shimmer[open]::after {
+  display: none;
+}
+
+@keyframes border-shimmer-spin {
+  to {
+    --shimmer-angle: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .border-shimmer::before,
+  .border-shimmer::after {
+    animation: none;
+  }
+}

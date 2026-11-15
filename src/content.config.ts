@@ -26,6 +26,7 @@ const projects = defineCollection({
     year: z.number(),
     url: z.string().url().optional(),
     featured: z.boolean(),
+    spotlight: z.enum(['full', 'half']).default('half'),
     tags: z.array(z.string()).optional(),
     draft: z.boolean(),
     unlisted: z.boolean().default(false),
