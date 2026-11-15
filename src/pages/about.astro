@@ -22,9 +22,6 @@ const rolesEntries = (await getCollection('roles')).sort(
   (a, b) => b.data.order - a.data.order,
 )
 
-// TODO: add Python to "Languages and frameworks" once confirmed
-// TODO: add LLM evals to "Quality" once built
-// TODO: add an "AI and agents" group once you confirm what to list
 const SKILL_GROUPS = [
   {
     title: 'Cloud and delivery',
@@ -77,12 +74,23 @@ const SKILL_GROUPS = [
   {
     title: 'Languages and frameworks',
     icon: Code,
-    skills: ['TypeScript', 'Node.js', 'React', 'React Native', 'Next.js', 'Vue'],
+    skills: [
+      'TypeScript',
+      'Node.js',
+      'React',
+      'React Native',
+      'Next.js',
+      'Vue',
+    ],
   },
   {
     title: 'Design and accessibility',
     icon: Eye,
-    skills: ['Design systems (Storybook, Figma)', 'WCAG-led development', 'Adobe Creative Suite (Photoshop, Illustrator, InDesign, After Effects, Lightroom)'],
+    skills: [
+      'Design systems (Storybook, Figma)',
+      'WCAG-led development',
+      'Adobe Creative Suite (Photoshop, Illustrator, InDesign, After Effects, Lightroom)',
+    ],
   },
   {
     title: 'Quality',
@@ -115,13 +123,9 @@ const roles = await Promise.all(
   />
 
   <div class="flex flex-col gap-24 px-4 py-12">
-    <div
-      class="relative mx-auto mb-12 grid w-full grid-cols-4 gap-x-4 md:grid-cols-8 lg:grid-cols-12 lg:gap-x-6"
-    >
+    <div class="relative mx-auto mb-12 grid w-full grid-cols-4 gap-x-4 md:grid-cols-8 lg:grid-cols-12 lg:gap-x-6">
       <div class="col-span-full lg:col-span-8 lg:col-start-3">
-        <h2
-          class="text-3xl leading-tight text-black md:text-4xl dark:text-white"
-        >
+        <h2 class="text-3xl leading-tight text-black md:text-4xl dark:text-white">
           👋 A bit about me
         </h2>
 
@@ -143,84 +147,74 @@ const roles = await Promise.all(
         </div>
       </div>
 
-      <div
-        class="prose dark:prose-invert col-span-full mt-8 max-w-full md:mt-12 lg:col-span-8 lg:col-start-3 lg:mt-16"
-      >
+      <div class="prose dark:prose-invert col-span-full mt-8 max-w-full md:mt-12 lg:col-span-8 lg:col-start-3 lg:mt-16">
         <Bio />
       </div>
 
-      <div
-        class="prose dark:prose-invert col-span-full mt-8 max-w-full md:mt-12 lg:col-span-10 lg:col-start-2 lg:mt-16"
-      >
+      <div class="prose dark:prose-invert col-span-full mt-8 max-w-full md:mt-12 lg:col-span-10 lg:col-start-2 lg:mt-16">
         <h2>Skills</h2>
 
         <div class="grid gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-4">
-          {
-            SKILL_GROUPS.map((group) => (
-              <div>
-                <h3 class="text-primary mt-0 mb-3 flex items-center gap-2 text-base font-semibold dark:text-white">
-                  <group.icon
-                    aria-hidden="true"
-                    class="size-5 shrink-0"
-                    stroke-width={1.5}
-                  />
-                  {group.title}
-                </h3>
-                <ul class="prose-sm m-0 list-disc space-y-1 pl-5">
-                  {group.skills.map((skill) => (
-                    <li class="m-0">{skill}</li>
-                  ))}
-                </ul>
-              </div>
-            ))
-          }
+          {SKILL_GROUPS.map((group) => (
+            <div>
+              <h3 class="text-primary mt-0 mb-3 flex items-center gap-2 text-base font-semibold dark:text-white">
+                <group.icon
+                  aria-hidden="true"
+                  class="size-5 shrink-0"
+                  stroke-width={1.5}
+                />
+                {group.title}
+              </h3>
+              <ul class="prose-sm m-0 list-disc space-y-1 pl-5">
+                {group.skills.map((skill) => (
+                  <li class="m-0">{skill}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div
-        class="col-span-full mt-8 max-w-full md:mt-12 lg:col-span-8 lg:col-start-3 lg:mt-16"
-      >
+      <div class="col-span-full mt-8 max-w-full md:mt-12 lg:col-span-8 lg:col-start-3 lg:mt-16">
         <h2 class="mb-8 text-2xl font-bold text-black dark:text-white">
           Experience
         </h2>
 
-        {
-          roles.map(({ data, Content }) => (
-            <details class="group dark:prose-invert mb-4 rounded-2xl shadow-md dark:bg-slate-800 dark:text-white dark:outline-white dark:hover:outline-2">
-              <summary class="flex w-full cursor-pointer items-center justify-center gap-6 rounded-md py-4 pr-8 pl-6">
-                <div class="flex-shrink-0">
-                  <BaseImage
-                    class="m-0 h-12 w-12 rounded-full"
-                    src={data.logo}
-                    alt={data.company}
-                    width={96}
-                    height={96}
-                    format="webp"
-                  />
-                </div>
-
-                <div class="prose space-y-0">
-                  <h2 class="not-prose text-primary my-0 text-xl font-normal dark:text-white">
-                    {data.company} / {data.role}
-                  </h2>
-
-                  <p class="mb-0 dark:text-white">{data.date}</p>
-                </div>
-
-                <div class="ml-auto flex-shrink-0">
-                  <Icon
-                    icon="arrow"
-                    className="ml-auto transition-transform ease-in-out group-open:rotate-180"
-                  />
-                </div>
-              </summary>
-
-              <div class="prose dark:prose-invert max-w-[unset] border-t-[1px] border-gray-200 p-8 dark:border-gray-800 dark:text-white">
-                <Content />
+        {roles.map(({ data, Content }) => (
+          <details class="border-shimmer group dark:prose-invert relative mb-4 rounded-2xl shadow-md [--shimmer-width:2px] dark:bg-slate-800 dark:text-white">
+            <summary class="flex w-full cursor-pointer items-center justify-center gap-6 rounded-md py-4 pr-8 pl-6">
+              <div class="shrink-0">
+                <BaseImage
+                  class="m-0 h-12 w-12 rounded-full"
+                  src={data.logo}
+                  alt={data.company}
+                  width={96}
+                  height={96}
+                  format="webp"
+                />
               </div>
-            </details>
-          ))
-        }
+
+              <div class="prose space-y-0">
+                <h2 class="not-prose text-primary my-0 text-xl font-normal dark:text-white">
+                  {data.company} / {data.role}
+                </h2>
+
+                <p class="mb-0 dark:text-white">{data.date}</p>
+              </div>
+
+              <div class="ml-auto shrink-0">
+                <Icon
+                  icon="arrow"
+                  className="ml-auto transition-transform ease-in-out group-open:rotate-180"
+                />
+              </div>
+            </summary>
+
+            <div class="prose dark:prose-invert max-w-[unset] border-t border-gray-200 p-8 dark:border-gray-800 dark:text-white">
+              <Content />
+            </div>
+          </details>
+        ))}
       </div>
     </div>
   </div>
