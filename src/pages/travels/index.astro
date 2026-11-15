@@ -25,21 +25,17 @@ const posts = entries.filter((entry) => {
     description="Exploring corners of the world. Discovering landscapes, people, plates, and places through the lens of camera and curiosity"
   />
 
-  {
-    featuredPosts.length > 0 && (
-      <div class="grid grid-cols-1 gap-12">
-        {featuredPosts.map((entry) => {
-          return <Spotlight post={entry} />
-        })}
-      </div>
-    )
-  }
+  {featuredPosts.length > 0 && (
+    <div class="grid grid-cols-1 gap-12">
+      {featuredPosts.map((entry) => {
+        return <Spotlight post={entry} />
+      })}
+    </div>
+  )}
 
   <div class="grid gap-4 lg:grid-cols-3">
-    {
-      posts.map((entry) => {
-        return <Card post={entry} />
-      })
-    }
+    {posts.map((entry) => {
+      return <Card post={entry} />
+    })}
   </div>
 </LandingPageLayout>

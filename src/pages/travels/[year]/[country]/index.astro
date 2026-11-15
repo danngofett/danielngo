@@ -38,11 +38,11 @@ const { Content } = await render(entry)
 >
   <Container>
     <div class="dark:text-white">
-      <div
-        class="flex items-center gap-2 py-8 md:py-16 lg:py-32 dark:text-white"
-      >
+      <div class="flex items-center gap-2 py-8 md:py-16 lg:py-32 dark:text-white">
         <Icon icon="arrow" className="h-6 w-6 rotate-90 transform" />
-        <a href="/travels" class="relative -top-px">Back to travels</a>
+        <a href="/travels" class="relative -top-px">
+          Back to travels
+        </a>
       </div>
     </div>
 
@@ -53,66 +53,64 @@ const { Content } = await render(entry)
       </p>
     </div>
 
-    {
-      entry.data.featured_image_src && (
-        <div class="mb-24 overflow-hidden rounded-2xl">
-          <BaseImage
-            class="block"
-            src={entry.data.featured_image_src}
-            alt={entry.data.featured_image_alt || ''}
-            height={1824}
-            width={2736}
-            format="webp"
-          />
-        </div>
-      )
-    }
+    {entry.data.featured_image_src && (
+      <div class="mb-24 overflow-hidden rounded-2xl">
+        <BaseImage
+          class="block"
+          src={entry.data.featured_image_src}
+          alt={entry.data.featured_image_alt || ''}
+          height={1824}
+          width={2736}
+          format="webp"
+        />
+      </div>
+    )}
 
     <div class="max-w-full mx-auto my-24 prose dark:prose-invert lg:px-16">
       <div class="mb-4">
-        <a href="#photos" class="text-sm">📸 Jump to photos</a>
+        <a href="#photos" class="text-sm">
+          📸 Jump to photos
+        </a>
       </div>
 
       <Content />
     </div>
 
     <div id="photos" class="md:px-8 lg:px-16 dark:text-white">
-      {
-        timeline.length > 0 && (
-          <div class="mb-24">
-            <h2 class="mb-8 text-3xl">Timeline</h2>
+      {timeline.length > 0 && (
+        <div class="mb-24">
+          <h2 class="mb-8 text-3xl">Timeline</h2>
 
-            <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-              {timeline.map((item) => (
-                <a
-                  href={`/travels/${item.id}`}
-                  class="flex items-center gap-4 px-4 py-2 transition-shadow rounded-lg shadow-md outline-slate-500 hover:shadow-lg hover:outline-2 dark:bg-slate-800 dark:hover:outline-white"
-                >
-                  {item.data.featured_image_src && (
-                    <div class="relative shrink-0 w-12 h-12 bg-gray-200 rounded-full">
-                      <BaseImage
-                        src={item.data.featured_image_src}
-                        alt={item.data.featured_image_alt || ''}
-                        height={120}
-                        width={120}
-                        class="object-cover w-12 h-12 rounded-full"
-                        format="webp"
-                      />
-                    </div>
-                  )}
-
-                  <div>
-                    <p class="text-gray-500 dark:text-slate-200">
-                      Day {item.data.day}
-                    </p>
-                    <h3 class="mb-2 text-xl">{item.data.title}</h3>
+          <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+            {timeline.map((item) => (
+              <a
+                href={`/travels/${item.id}`}
+                class="flex items-center gap-4 px-4 py-2 transition-shadow rounded-lg shadow-md outline-slate-500 hover:shadow-lg hover:outline-2 dark:bg-slate-800 dark:hover:outline-white"
+              >
+                {item.data.featured_image_src && (
+                  <div class="relative shrink-0 w-12 h-12 bg-gray-200 rounded-full">
+                    <BaseImage
+                      src={item.data.featured_image_src}
+                      alt={item.data.featured_image_alt || ''}
+                      height={120}
+                      width={120}
+                      class="object-cover w-12 h-12 rounded-full"
+                      format="webp"
+                    />
                   </div>
-                </a>
-              ))}
-            </div>
+                )}
+
+                <div>
+                  <p class="text-gray-500 dark:text-slate-200">
+                    Day {item.data.day}
+                  </p>
+                  <h3 class="mb-2 text-xl">{item.data.title}</h3>
+                </div>
+              </a>
+            ))}
           </div>
-        )
-      }
+        </div>
+      )}
     </div>
   </Container>
 </TravelPost>

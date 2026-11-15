@@ -21,29 +21,25 @@ const { compact = false } = Astro.props
   ]}
   href={linkResolver(Astro.props.post)}
 >
-  {
-    data.featured_image_src && (
-      <div class="relative">
-        <BaseImage
-          src={data.featured_image_src}
-          alt={data.featured_image_alt || ''}
-          width={1200}
-          format="webp"
-          height={687}
-          class="w-full rounded-xl object-fill"
-        />
-      </div>
-    )
-  }
+  {data.featured_image_src && (
+    <div class="relative">
+      <BaseImage
+        src={data.featured_image_src}
+        alt={data.featured_image_alt || ''}
+        width={1200}
+        format="webp"
+        height={687}
+        class="w-full rounded-xl object-fill"
+      />
+    </div>
+  )}
 
   <div class="mb-auto">
-    {
-      isDraft && (
-        <p class="text-md mb-6 font-normal text-slate-500 italic dark:text-slate-300">
-          In progress
-        </p>
-      )
-    }
+    {isDraft && (
+      <p class="text-md mb-6 font-normal text-slate-500 italic dark:text-slate-300">
+        In progress
+      </p>
+    )}
 
     <h3
       class:list={[
@@ -65,17 +61,15 @@ const { compact = false } = Astro.props
   </div>
 
   <div class="mt-auto hidden md:block">
-    {
-      !isDraft && (
-        <span
-          class:list={[
-            'underline-animation inline-block text-xl font-normal dark:text-white',
-            compact && 'lg:text-base',
-          ]}
-        >
-          View the {collection === 'travels' ? 'article' : 'project'}
-        </span>
-      )
-    }
+    {!isDraft && (
+      <span
+        class:list={[
+          'underline-animation inline-block text-xl font-normal dark:text-white',
+          compact && 'lg:text-base',
+        ]}
+      >
+        View the {collection === 'travels' ? 'article' : 'project'}
+      </span>
+    )}
   </div>
 </a>

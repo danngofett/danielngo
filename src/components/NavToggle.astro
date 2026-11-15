@@ -5,9 +5,7 @@ const { isActive } = Astro.props
 ---
 
 <nav-toggle>
-  <button
-    class="rounded-full border-2 p-1 transition-colors hover:border-slate-600 dark:text-white"
-  >
+  <button class="rounded-full border-2 p-1 transition-colors hover:border-slate-600 dark:text-white">
     <span class="icon visible md:hidden">
       {isActive ? <Icon icon="close" /> : <Icon icon="hamburger" />}
     </span>

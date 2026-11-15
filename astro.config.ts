@@ -18,10 +18,14 @@ const unlistedProjectPaths = readdirSync('./src/content/projects')
 
 export default defineConfig({
   site: 'https://danielngo.com',
-  integrations: [mdx(), sitemap({
+  integrations: [
+    mdx(),
+    sitemap({
       filter: (page) =>
         !unlistedProjectPaths.some((path) => page.endsWith(path)),
-    }), react()],
+    }),
+    react(),
+  ],
   vite: {
     css: {
       transformer: 'postcss',

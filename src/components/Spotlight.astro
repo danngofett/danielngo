@@ -31,47 +31,37 @@ const { stacked = false } = Astro.props
     ]}
   >
     <div class="space-y-2 md:space-y-4 md:pr-8">
-      <h2
-        class="hidden mb-2 font-normal text-black text-md md:block md:text-lg dark:text-white"
-      >
+      <h2 class="hidden mb-2 font-normal text-black text-md md:block md:text-lg dark:text-white">
         {data.year} Spotlight
       </h2>
 
-      <h3
-        class="text-xl leading-tight text-black md:text-3xl lg:text-4xl dark:text-white"
-      >
+      <h3 class="text-xl leading-tight text-black md:text-3xl lg:text-4xl dark:text-white">
         {data.title}
       </h3>
 
-      <p
-        class="mt-2 text-base font-normal text-slate-500 md:text-xl dark:text-slate-200"
-      >
+      <p class="mt-2 text-base font-normal text-slate-500 md:text-xl dark:text-slate-200">
         {data.description}
       </p>
     </div>
 
-    <div
-      class="hidden mt-8 text-base font-normal group-hover:underline-animation md:block md:text-xl"
-    >
+    <div class="hidden mt-8 text-base font-normal group-hover:underline-animation md:block md:text-xl">
       <span class="inline-block underline-animation dark:text-white">
         View the {collection === 'travels' ? 'article' : 'project'}
       </span>
     </div>
   </div>
 
-  {
-    data.featured_image_src && (
-      <div class:list={['order-1', stacked && 'md:order-0 md:row-start-1']}>
-        <BaseImage
-          src={data.featured_image_src}
-          alt={data.featured_image_alt || data.title || ''}
-          width={3840}
-          height={1920}
-          format="webp"
-          class="block rounded-lg"
-          loading="eager"
-        />
-      </div>
-    )
-  }
+  {data.featured_image_src && (
+    <div class:list={['order-1', stacked && 'md:order-0 md:row-start-1']}>
+      <BaseImage
+        src={data.featured_image_src}
+        alt={data.featured_image_alt || data.title || ''}
+        width={3840}
+        height={1920}
+        format="webp"
+        class="block rounded-lg"
+        loading="eager"
+      />
+    </div>
+  )}
 </a>

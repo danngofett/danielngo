@@ -51,18 +51,16 @@ const { Content } = await render(entry)
     </div>
 
     <div class="mb-24 overflow-hidden rounded-2xl">
-      {
-        entry.data.featured_image_src && (
-          <BaseImage
-            class="block"
-            src={entry.data.featured_image_src}
-            alt={entry.data.featured_image_alt || ''}
-            width={2736}
-            height={1824}
-            format="webp"
-          />
-        )
-      }
+      {entry.data.featured_image_src && (
+        <BaseImage
+          class="block"
+          src={entry.data.featured_image_src}
+          alt={entry.data.featured_image_alt || ''}
+          width={2736}
+          height={1824}
+          format="webp"
+        />
+      )}
     </div>
 
     <div class="prose dark:prose-invert max-w-full">

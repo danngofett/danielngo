@@ -15,7 +15,10 @@ const blog = defineCollection({
 })
 
 const projects = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/projects' }),
+  loader: glob({
+    pattern: '**/[^_]*.{md,mdx}',
+    base: './src/content/projects',
+  }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -51,7 +54,10 @@ const travels = defineCollection({
 })
 
 const timeline = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/timeline' }),
+  loader: glob({
+    pattern: '**/[^_]*.{md,mdx}',
+    base: './src/content/timeline',
+  }),
   schema: z.object({
     day: z.number(),
     title: z.string(),

@@ -27,6 +27,8 @@ const countries = await getCollection('travels').then((entry) => {
   <IntroHeader title={`Travel ${year}`} description={`Travel ${year}`} />
 
   <div class="grid grid-cols-3 gap-12">
-    {countries.map((country) => <Card post={country} />)}
+    {countries.map((country) => (
+      <Card post={country} />
+    ))}
   </div>
 </LandingPageLayout>

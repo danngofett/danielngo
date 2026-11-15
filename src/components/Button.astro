@@ -20,18 +20,14 @@ const variants = {
 const styles = `${base} ${variants[variant]}`
 ---
 
-{
-  href && (
-    <a href={href} class={styles}>
-      <slot />
-    </a>
-  )
-}
+{href && (
+  <a href={href} class={styles}>
+    <slot />
+  </a>
+)}
 
-{
-  onClick && (
-    <button type="button" class={styles}>
-      <slot />
-    </button>
-  )
-}
+{onClick && (
+  <button type="button" class={styles}>
+    <slot />
+  </button>
+)}

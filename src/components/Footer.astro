@@ -1,8 +1,8 @@
 ---
-import HeaderLink from "./HeaderLink.astro";
-import Container from "./Container.astro";
+import HeaderLink from './HeaderLink.astro'
+import Container from './Container.astro'
 
-const today = new Date();
+const today = new Date()
 ---
 
 <footer>
@@ -44,11 +44,11 @@ const today = new Date();
       <div class="dark:text-grey-300 text-lg text-gray-500">
         <div>All rights reserved &copy; Daniel Ngo {today.getFullYear()}</div>
         <div>
-          Built with{" "}
+          Built with{' '}
           <HeaderLink href="https://astro.build/" target="_blank">
             Astro
           </HeaderLink>
-          . Hosted on{" "}
+          . Hosted on{' '}
           <HeaderLink href="https://www.netlify.com/">Netlify</HeaderLink>.
         </div>
       </div>
