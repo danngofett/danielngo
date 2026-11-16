@@ -1,0 +1,17 @@
+%% MCP server flow for the myTrellis AI case study.
+%% Dark steps are the person's; light steps are the system.
+%% Deliberately high level: no endpoints, token details or permission names.
+%% output: src/assets/images/projects/trellis-ai/mcp-flow.png
+%% spacing: 30 40
+flowchart LR
+  A["<b>Ask</b><br/>my own AI<br/>assistant, in<br/>plain language"]
+  B["<b>Connect</b><br/>standard sign-in,<br/>I choose the<br/>workspace and<br/>permissions"]
+  C["<b>Tools</b><br/>read records,<br/>create and edit<br/>drafts only"]
+  D["<b>Same services<br/>as the app</b><br/>validation,<br/>numbering and<br/>tenant isolation"]
+  E["<b>Draft invoice</b><br/>labelled as<br/>agent-made,<br/>every action<br/>audited"]
+  F["<b>Review and send</b><br/>I check it<br/>in the app"]
+
+  A --> B --> C --> D --> E --> F
+
+  classDef me fill:#111827,stroke:#111827,color:#ffffff
+  class A,B,F me
