@@ -18,10 +18,10 @@ const { stacked = false, showLabel = true } = Astro.props
 
 <a
   class:list={[
-    'border-shimmer group relative mx-auto grid w-full cursor-pointer rounded-2xl border-4 border-white bg-gray-100 p-4 dark:border-gray-800 dark:bg-gray-800 dark:lg:bg-gray-800',
+    'border-shimmer group relative mx-auto grid w-full cursor-pointer rounded-2xl border-4 border-white bg-gray-100 dark:border-gray-800 dark:bg-gray-800 dark:lg:bg-gray-800',
     stacked
-      ? 'grid-cols-[160px_1fr] gap-4 md:grid-cols-1 md:gap-8 md:p-8'
-      : 'grid-cols-[160px_1fr] gap-4 md:grid-cols-[1fr_240px] md:gap-8 md:p-8 lg:grid-cols-[1fr_420px] lg:gap-12 xl:grid-cols-[1fr_720px]',
+      ? 'grid-cols-1 gap-5 p-5 md:gap-8 md:p-8'
+      : 'grid-cols-1 gap-5 p-5 md:grid-cols-[1fr_240px] md:gap-8 md:p-8 lg:grid-cols-[1fr_420px] lg:gap-12 xl:grid-cols-[1fr_720px]',
   ]}
   href={linkResolver(Astro.props.post)}
 >
@@ -49,7 +49,7 @@ const { stacked = false, showLabel = true } = Astro.props
       </p>
     </div>
 
-    <div class="hidden mt-8 text-base font-normal md:block md:text-xl">
+    <div class="mt-6 text-base font-normal md:mt-8 md:text-xl">
       <CardCta>View {collection === 'travels' ? 'article' : 'project'}</CardCta>
     </div>
   </div>
