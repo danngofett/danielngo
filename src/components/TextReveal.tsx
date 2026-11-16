@@ -60,16 +60,34 @@ export const TextReveal = ({
 
   return (
     <div
-      className={` ${className || ''} relative block overflow-hidden bg-transparent whitespace-nowrap min-[440px]:inline-block`}
-      style={widths[index] ? { width: `${widths[index]}px` } : undefined}
+      className={`${className || ''} relative grid max-w-full overflow-hidden bg-transparent min-[440px]:inline-block min-[440px]:w-(--rotating-width) min-[440px]:whitespace-nowrap`}
+      style={
+        widths[index]
+          ? ({
+              '--rotating-width': `${widths[index]}px`,
+            } as React.CSSProperties)
+          : undefined
+      }
     >
-      {/* Invisible, in-flow spacer: reserves line height only */}
+      {/* Wide screens: invisible, in-flow spacer that reserves one line */}
       <span
-        className="pointer-events-none inline-block text-transparent select-none"
+        className="pointer-events-none hidden text-transparent select-none min-[440px]:inline-block"
         aria-hidden
       >
         &nbsp;
       </span>
+
+      {/* Phones: the words wrap, so every word is stacked invisibly in one
+          grid cell and the box is as tall as the tallest wrapped word. */}
+      {words.map((word) => (
+        <span
+          key={word}
+          className="pointer-events-none invisible col-start-1 row-start-1 select-none min-[440px]:hidden"
+          aria-hidden
+        >
+          {word}
+        </span>
+      ))}
 
       {/* Off-flow measurers for every word */}
       {words.map((word, i) => (
@@ -78,7 +96,7 @@ export const TextReveal = ({
           ref={(el) => {
             measureRefs.current[i] = el
           }}
-          className="pointer-events-none invisible absolute top-0 left-0 inline-block select-none"
+          className="pointer-events-none invisible absolute top-0 left-0 inline-block whitespace-nowrap select-none"
           aria-hidden
         >
           {word}
@@ -88,7 +106,7 @@ export const TextReveal = ({
       {transitions((style, item) => (
         <AnimatedSpan
           key={item}
-          className="absolute bottom-0 left-0 inline-block w-full text-black dark:text-white"
+          className="absolute top-0 left-0 w-full text-black dark:text-white"
           style={{
             opacity: style.opacity,
             transform: style.transform,
