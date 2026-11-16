@@ -53,6 +53,7 @@ const { Content } = await render(entry)
     <div class="mb-24 overflow-hidden rounded-2xl">
       {entry.data.featured_image_src && (
         <BaseImage
+          zoom={false}
           class="block"
           src={entry.data.featured_image_src}
           alt={entry.data.featured_image_alt || ''}

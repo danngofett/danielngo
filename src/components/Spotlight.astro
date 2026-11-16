@@ -54,6 +54,7 @@ const { stacked = false } = Astro.props
   {data.featured_image_src && (
     <div class:list={['order-1', stacked && 'md:order-0 md:row-start-1']}>
       <BaseImage
+        zoom={false}
         src={data.featured_image_src}
         alt={data.featured_image_alt || data.title || ''}
         width={3840}

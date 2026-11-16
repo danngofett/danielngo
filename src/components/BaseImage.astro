@@ -1,7 +1,7 @@
 ---
 import { v2 as cloudinary } from 'cloudinary'
 import { CldImage } from 'astro-cloudinary'
-import { Image } from 'astro:assets'
+import { Image, getImage } from 'astro:assets'
 import type { ImageMetadata } from 'astro'
 import type { CldImageProps } from 'astro-cloudinary'
 
@@ -14,6 +14,10 @@ interface Props {
   format?: string
   class?: string
   loading?: CldImageProps['loading']
+  /** Click to enlarge in a lightbox. On by default; turn off for heroes, cards and avatars. */
+  zoom?: boolean
+  /** Rendered width hint for the browser's srcset choice. Defaults to the 768px article column. */
+  sizes?: string
 }
 
 const {
@@ -25,6 +29,8 @@ const {
   format,
   class: classes,
   loading = 'lazy',
+  zoom = true,
+  sizes = '(min-width: 768px) 768px, 100vw',
 } = Astro.props
 
 // Interim local images: a file at src/assets/images/<src>.<ext> is used in
@@ -53,38 +59,97 @@ const imageSrc = cloudinary.url(src, {
   quality: 'auto',
   fetch_format: 'webp',
 })
+
+const imageClass = [
+  classes,
+  'rounded-xl',
+  caption && 'mb-4 border border-neutral-100',
+]
+  .filter(Boolean)
+  .join(' ')
+
+// Responsive widths for local images, up to 2x of a ~1000px slot and never
+// larger than the original.
+const responsiveWidths = local
+  ? [
+      ...new Set(
+        [480, 768, 1152, 1536, 2048]
+          .filter((w) => w < local.width)
+          .concat(local.width),
+      ),
+    ].filter((w) => w <= 2048)
+  : []
+
+// Larger version for the lightbox; never upscaled past the original.
+const zoomSrc = !zoom
+  ? undefined
+  : local
+    ? (
+        await getImage({
+          src: local,
+          width: Math.min(local.width, 2400),
+          format: 'webp',
+          quality: 85,
+        })
+      ).src
+    : cloudinary.url(src, {
+        width: 2400,
+        crop: 'limit',
+        quality: 'auto',
+        fetch_format: 'webp',
+      })
+
+const Wrapper = zoom ? 'button' : 'div'
+const wrapperProps = zoom
+  ? {
+      type: 'button',
+      class: 'image-zoom',
+      'data-zoom-src': zoomSrc,
+      'data-zoom-alt': alt,
+      'data-zoom-caption': caption,
+      'aria-label': `Enlarge image: ${alt}`,
+    }
+  : {}
 ---
 
 <div class="space-y-4">
-  {local ? (
-    <Image
-      class={`${classes} rounded-xl ${caption ? 'mb-4 border border-neutral-100' : ''}`}
-      src={local}
-      alt={alt}
-      format="webp"
-      quality={80}
-      loading={loading}
-      width={width ?? Math.min(local.width, 1600)}
-      height={height}
-      fit="cover"
-      sizes="100vw"
-    />
-  ) : (
-    <CldImage
-      class={`${classes} rounded-xl ${caption ? 'mb-4 border border-neutral-100' : ''}`}
-      src={imageSrc}
-      alt={alt}
-      format={format}
-      crop="fill"
-      quality={80}
-      loading={loading}
-      width={width}
-      height={height}
-      sizes="100vw"
-    />
-  )}
+  <Wrapper {...wrapperProps}>
+    {local ? (
+      <Image
+        class={imageClass}
+        src={local}
+        alt={alt}
+        format="webp"
+        quality={80}
+        loading={loading}
+        width={width ?? Math.min(local.width, 1600)}
+        height={height}
+        fit="cover"
+        widths={responsiveWidths}
+        sizes={sizes}
+      />
+    ) : (
+      <CldImage
+        class={imageClass}
+        src={imageSrc}
+        alt={alt}
+        format={format}
+        crop="fill"
+        quality={80}
+        loading={loading}
+        width={width}
+        height={height}
+        sizes="100vw"
+      />
+    )}
+  </Wrapper>
 
   {caption && (
     <p class="mt-0 text-sm italic text-gray-500 dark:text-white">{caption}</p>
   )}
 </div>
+
+<script>
+  import { initImageLightbox } from '@utils/image-lightbox'
+  initImageLightbox()
+</script>

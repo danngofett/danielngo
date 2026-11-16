@@ -46,6 +46,7 @@ const roles = await Promise.all(
       <div class="col-span-full mt-10 lg:col-span-10 lg:col-start-2 lg:mt-16">
         <div class="aspect-h-4 aspect-w-3 md:aspect-h-2 md:aspect-w-3">
           <BaseImage
+            zoom={false}
             class="rounded-lg object-cover object-center transition-opacity"
             alt="Photo of Daniel Ngo at Fukuoka, TeamLab Forests"
             src="about/teamlab-fukuoka"
@@ -94,6 +95,7 @@ const roles = await Promise.all(
             <summary class="flex w-full cursor-pointer items-center justify-center gap-6 rounded-md py-4 pr-8 pl-6">
               <div class="shrink-0">
                 <BaseImage
+                  zoom={false}
                   class="m-0 h-12 w-12 rounded-full"
                   src={data.logo}
                   alt={data.company}

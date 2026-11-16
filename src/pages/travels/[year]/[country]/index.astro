@@ -56,6 +56,7 @@ const { Content } = await render(entry)
     {entry.data.featured_image_src && (
       <div class="mb-24 overflow-hidden rounded-2xl">
         <BaseImage
+          zoom={false}
           class="block"
           src={entry.data.featured_image_src}
           alt={entry.data.featured_image_alt || ''}
@@ -90,6 +91,7 @@ const { Content } = await render(entry)
                 {item.data.featured_image_src && (
                   <div class="relative shrink-0 w-12 h-12 bg-gray-200 rounded-full">
                     <BaseImage
+                      zoom={false}
                       src={item.data.featured_image_src}
                       alt={item.data.featured_image_alt || ''}
                       height={120}

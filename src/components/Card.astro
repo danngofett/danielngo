@@ -24,6 +24,7 @@ const { compact = false } = Astro.props
   {data.featured_image_src && (
     <div class="relative">
       <BaseImage
+        zoom={false}
         src={data.featured_image_src}
         alt={data.featured_image_alt || ''}
         width={1200}
