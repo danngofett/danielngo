@@ -3,26 +3,34 @@ import { linkResolver } from '@utils/link-resolver'
 
 import type { CollectionEntry } from 'astro:content'
 import BaseImage from './BaseImage.astro'
+import CardCta from './CardCta.astro'
 
 interface Props {
   post: CollectionEntry<'travels' | 'projects' | 'blog'>
   compact?: boolean
+  /** Horizontal layout: thumbnail on the left, text on the right. */
+  inline?: boolean
 }
 
 const { data, collection } = Astro.props.post
 const isDraft = Astro.props.post.data.draft
-const { compact = false } = Astro.props
+const { compact = false, inline = false } = Astro.props
 ---
 
 <a
   class:list={[
-    'border-shimmer group relative grid grid-cols-[160px_1fr] gap-4 gap-x-4 rounded-2xl border-4 border-white p-4 md:grid-cols-1 md:flex-col md:gap-8 md:p-8 md:py-20 md:pt-8 lg:bg-gray-100 dark:border-slate-800 dark:lg:bg-gray-800',
-    compact ? 'lg:gap-5 lg:p-5 lg:pb-10' : 'lg:pt-8',
+    'border-shimmer group relative grid rounded-2xl border-4 border-white dark:border-slate-800',
+    inline
+      ? 'grid-cols-[120px_1fr] gap-x-4 gap-y-2 bg-gray-100 p-4 md:grid-cols-[260px_1fr] md:gap-x-8 md:p-6 dark:bg-gray-800'
+      : [
+          'grid-cols-[160px_1fr] gap-4 gap-x-4 p-4 md:grid-cols-1 md:flex-col md:gap-8 md:p-8 md:py-20 md:pt-8 lg:bg-gray-100 dark:lg:bg-gray-800',
+          compact ? 'lg:gap-5 lg:p-5 lg:pb-10' : 'lg:pt-8',
+        ],
   ]}
   href={linkResolver(Astro.props.post)}
 >
   {data.featured_image_src && (
-    <div class="relative">
+    <div class:list={['relative', inline && 'row-span-2 self-center']}>
       <BaseImage
         zoom={false}
         src={data.featured_image_src}
@@ -35,7 +43,7 @@ const { compact = false } = Astro.props
     </div>
   )}
 
-  <div class="mb-auto">
+  <div class:list={[inline ? 'self-end' : 'mb-auto']}>
     {isDraft && (
       <p class="text-md mb-6 font-normal text-slate-500 italic dark:text-slate-300">
         In progress
@@ -44,7 +52,8 @@ const { compact = false } = Astro.props
 
     <h3
       class:list={[
-        'text-xl leading-tight text-black md:text-3xl dark:text-white',
+        'text-xl leading-tight text-black dark:text-white',
+        inline ? 'md:text-2xl' : 'md:text-3xl',
         compact && 'lg:text-2xl',
       ]}
     >
@@ -53,7 +62,8 @@ const { compact = false } = Astro.props
 
     <p
       class:list={[
-        'mt-2 font-normal text-slate-500 md:text-xl dark:text-slate-300',
+        'mt-2 font-normal text-slate-500 dark:text-slate-300',
+        inline ? 'line-clamp-3 md:line-clamp-none md:text-base' : 'md:text-xl',
         compact && 'lg:text-base',
       ]}
     >
@@ -61,16 +71,11 @@ const { compact = false } = Astro.props
     </p>
   </div>
 
-  <div class="mt-auto hidden md:block">
+  <div class:list={['hidden md:block', inline ? 'self-start' : 'mt-auto']}>
     {!isDraft && (
-      <span
-        class:list={[
-          'underline-animation inline-block text-xl font-normal dark:text-white',
-          compact && 'lg:text-base',
-        ]}
-      >
-        View the {collection === 'travels' ? 'article' : 'project'}
-      </span>
+      <CardCta class:list={['text-xl font-normal', compact && 'lg:text-base']}>
+        View {collection === 'travels' ? 'article' : 'project'}
+      </CardCta>
     )}
   </div>
 </a>

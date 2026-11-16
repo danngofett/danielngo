@@ -1,0 +1,15 @@
+---
+interface Props {
+  class?: string
+}
+
+const { class: classes } = Astro.props
+---
+
+<!-- Needs an ancestor with the `group` class (the card link): its hover or
+     keyboard focus draws the underline. -->
+<span class:list={['cta inline-block dark:text-white', classes]}>
+  <span class="cta-label relative inline-block">
+    <slot />
+  </span>
+</span>

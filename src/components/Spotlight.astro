@@ -3,6 +3,7 @@ import { linkResolver } from '@utils/link-resolver'
 
 import type { CollectionEntry } from 'astro:content'
 import BaseImage from './BaseImage.astro'
+import CardCta from './CardCta.astro'
 
 interface Props {
   post: CollectionEntry<'travels' | 'projects'>
@@ -44,10 +45,8 @@ const { stacked = false } = Astro.props
       </p>
     </div>
 
-    <div class="hidden mt-8 text-base font-normal group-hover:underline-animation md:block md:text-xl">
-      <span class="inline-block underline-animation dark:text-white">
-        View the {collection === 'travels' ? 'article' : 'project'}
-      </span>
+    <div class="hidden mt-8 text-base font-normal md:block md:text-xl">
+      <CardCta>View {collection === 'travels' ? 'article' : 'project'}</CardCta>
     </div>
   </div>
 

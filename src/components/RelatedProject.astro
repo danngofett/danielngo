@@ -13,14 +13,9 @@ const posts = (
 ---
 
 {posts.length > 0 && (
-  <ul
-    class:list={[
-      'not-prose mt-6 grid list-none grid-cols-1 gap-8 p-0',
-      posts.length > 1 && 'md:grid-cols-2',
-    ]}
-  >
+  <ul class="not-prose mt-6 grid list-none grid-cols-1 gap-6 p-0">
     {posts.map((post) => (
-      <Card post={post} compact />
+      <Card post={post} compact inline />
     ))}
   </ul>
 )}
