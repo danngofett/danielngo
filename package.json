@@ -15,6 +15,7 @@
     "astro": "astro",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "diagrams": "node scripts/render-diagrams.mjs",
     "cloudinary:rename": "node scripts/rename.mjs travels/ukraine"
   },
   "dependencies": {
@@ -47,7 +48,9 @@
     "dotenv": "18.0.9",
     "fs-extra": "11.4.1",
     "lodash.debounce": "4.0.8",
+    "mermaid": "11.17.2",
     "node-html-parser": "9.0.7",
+    "playwright-core": "1.63.0",
     "prettier": "3.9.10",
     "prettier-plugin-astro": "1.1.2",
     "prettier-plugin-tailwindcss": "0.8.1",
