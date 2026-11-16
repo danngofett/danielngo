@@ -1,0 +1,36 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import Spotlight from './Spotlight.astro'
+
+interface Props {
+  /** Projects to show; only those marked `featured` are rendered. */
+  entries: CollectionEntry<'projects'>[]
+  /** Show the "YYYY Spotlight" label on each card. */
+  showLabel?: boolean
+}
+
+const { entries, showLabel = true } = Astro.props
+
+const featured = entries
+  .filter((entry) => entry.data.featured)
+  .sort((a, b) => b.data.year - a.data.year)
+
+const full = featured.filter((entry) => entry.data.spotlight === 'full')
+const half = featured.filter((entry) => entry.data.spotlight !== 'full')
+---
+
+{full.length > 0 && (
+  <div class="grid grid-cols-1 gap-8 lg:gap-12">
+    {full.map((entry) => (
+      <Spotlight post={entry} showLabel={showLabel} />
+    ))}
+  </div>
+)}
+
+{half.length > 0 && (
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
+    {half.map((entry) => (
+      <Spotlight post={entry} stacked showLabel={showLabel} />
+    ))}
+  </div>
+)}

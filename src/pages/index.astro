@@ -5,8 +5,14 @@ import Footer from '@components/Footer.astro'
 import Button from '@components/Button.astro'
 import TextReveal from '@components/TextReveal'
 import Container from '@components/Container.astro'
+import FeaturedProjects from '@components/FeaturedProjects.astro'
+import { getCollection } from 'astro:content'
 
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
+
+const projects = (await getCollection('projects')).filter(
+  (entry) => import.meta.env.DEV || (!entry.data.draft && !entry.data.unlisted),
+)
 
 const FOCUS_AREAS = [
   'AI agents',
@@ -38,7 +44,8 @@ const FOCUS_AREAS = [
           <div class="grid lg:grid-cols-5">
             <div class="col-span-3 py-3">
               <h2 class="text-3xl leading-tight text-black md:text-4xl dark:text-white">
-                Full-stack engineer building production systems with a focus on
+                Full-stack engineer building production-ready systems with a
+                focus on
                 <TextReveal
                   className="relative top-2.25"
                   client:load
@@ -62,6 +69,20 @@ const FOCUS_AREAS = [
           </div>
         </div>
       </header>
+
+      <section class="flex flex-col gap-8 px-4 pb-24 lg:gap-12">
+        <h2 class="text-2xl text-black md:text-3xl dark:text-white">
+          Selected work
+        </h2>
+
+        <FeaturedProjects entries={projects} showLabel={false} />
+
+        <div>
+          <Button href="/projects" variant="secondary">
+            View all projects
+          </Button>
+        </div>
+      </section>
     </Container>
     <Footer />
   </body>

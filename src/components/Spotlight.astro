@@ -8,10 +8,12 @@ import CardCta from './CardCta.astro'
 interface Props {
   post: CollectionEntry<'travels' | 'projects'>
   stacked?: boolean
+  /** Show the "YYYY Spotlight" label above the title. */
+  showLabel?: boolean
 }
 
 const { data, collection } = Astro.props.post
-const { stacked = false } = Astro.props
+const { stacked = false, showLabel = true } = Astro.props
 ---
 
 <a
@@ -32,9 +34,11 @@ const { stacked = false } = Astro.props
     ]}
   >
     <div class="space-y-2 md:space-y-4 md:pr-8">
-      <h2 class="hidden mb-2 font-normal text-black text-md md:block md:text-lg dark:text-white">
-        {data.year} Spotlight
-      </h2>
+      {showLabel && (
+        <h2 class="hidden mb-2 font-normal text-black text-md md:block md:text-lg dark:text-white">
+          {data.year} Spotlight
+        </h2>
+      )}
 
       <h3 class="text-xl leading-tight text-black md:text-3xl lg:text-4xl dark:text-white">
         {data.title}
