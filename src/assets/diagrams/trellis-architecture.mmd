@@ -1,0 +1,27 @@
+%% Conceptual architecture for the myTrellis case study.
+%% Deliberately high level: no component names, hosts, regions or settings.
+%% output: src/assets/images/projects/trellis/architecture.png
+%% spacing: 50 80
+flowchart LR
+  subgraph Clients["Clients"]
+    AA["Admin app"]
+    CA["Customer app"]
+  end
+
+  subgraph Servers["Shared application servers"]
+    AAPI["Admin API"]
+    CAPI["Customer API"]
+    JOBS["Scheduled jobs<br/>reminders, recurring invoices"]
+  end
+
+  DIR[("Customer directory<br/>which customer is which")]
+  DATA[("One database per customer<br/>provisioned automatically")]
+  EXT["Payments, email<br/>and document storage"]
+
+  AA --> AAPI
+  CA --> CAPI
+  AAPI --> DIR
+  CAPI -->|"identify customer"| DIR
+  CAPI ==>|"scoped to one customer"| DATA
+  JOBS ==>|"per-customer sweeps"| DATA
+  Servers --> EXT

@@ -1,13 +1,13 @@
 ---
 title: myTrellis
-description: A multi-tenant invoicing platform for sole traders and small businesses - simplifying quote to invoices with payment reminders and workflow automation.
-featured_image_alt: myTrellis
+description: A multi-tenant invoicing platform for sole traders and small businesses - simplifying quotes to invoices with payment reminders and workflow automation.
+featured_image_src: projects/trellis/featured-image
+featured_image_alt: myTrellis app screens, tilted across a green grid
 featured: true
 spotlight: full
 toc: true
 year: 2026
 draft: false
-unlisted: true
 tags:
   [
     TypeScript,
@@ -21,135 +21,164 @@ tags:
     Terraform,
     GitHub Actions,
     Next.js,
-    Fumadocs,
   ]
 ---
 
+import BaseImage from '@components/BaseImage.astro'
 import RelatedProject from '@components/RelatedProject.astro'
 
 # TLDR;
 
-- **Role**: Sole designer and engineer
-  {/* TODO: confirm this still holds now that it is a team venture. If partners cover product, sales or ops, say so here, e.g. "Lead engineer and designer". */}
-- **Team**: Me and a few business partners
-  {/* TODO: add each partner's focus if you want (e.g. product, sales, operations). */}
-- **Status**: Business venture with partners, in closed alpha
-- **Stack**: TypeScript monorepo with NestJS APIs, React front ends and PostgreSQL via Prisma, running on Google Cloud and delivered with Terraform and GitHub Actions. Public site and docs in Next.js and Fumadocs
-- **Scale**: A customer app and an internal admin app, each with its own API, plus a monitoring job, a shared design system and a public site with documentation
+| Dimension              | Details                                                                                                                  |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Role and scope         | Sole designer and engineer: product, design system, infrastructure, CI/CD and the closed alpha                           |
+| Team                   | Me and a few business partners                                                                                           |
+| Status                 | Start-up in closed alpha, with around a dozen real users on test tenants                                                 |
+| Core stack             | End-to-end TypeScript, NestJS, React, PostgreSQL (Prisma), better-auth, Stripe Connect                                   |
+| Infrastructure         | Google Cloud in Australia, Terraform (development, UAT, production), GitHub Actions                                      |
+| Architecture           | A database per tenant, shared application servers, expand-and-contract migrations                                        |
+| AI integration         | MCP server with scoped OAuth and an audit trail of agent activity, plus AI invoice scanning (see the related case study) |
+| Quality and operations | Storybook, visual regression tests, distributed tracing, Sentry, tested restores                                         |
 
 ---
 
 ## The problem and who it's for
 
-myTrellis is a multi-tenant invoicing SaaS for sole traders and small businesses.
+myTrellis is an invoicing platform for sole traders and small businesses.
 
-It is built like enterprise software (tenant isolation, audit trails, tested restores, controlled releases) because small businesses still deserve their financial data to be treated carefully.
+It started with my own freelance admin. For over a decade I edited an invoice template by hand in Adobe InDesign, and I couldn't justify $30 to $75 a month for enterprise platforms when freelance income fluctuates. Friends and tradies were hacking invoices together too, or paying for platforms and using a fraction of them.
 
-## What I built
+<BaseImage
+  src="projects/trellis/overview"
+  alt="The myTrellis customer app overview, showing paid, outstanding and overdue totals, items needing attention and upcoming client reminders"
+  width={1600}
+  caption="The customer app overview, running on demo data."
+/>
 
-Two products on one platform:
+## How this came together
 
-- **Customer app**: where each business manages clients, quotes, invoices, recurring invoices, expenses and reporting, and gets paid online with a pay link and QR code.
-- **Admin app**: internal tooling for operating the product and supporting customers.
+Between working full-time and becoming a dad, building a SaaS on the side felt out of reach... however, AI assisted development tools gave me the leverage to make it finally happen. These tools accelerated the development work whilst I could focus on high-level architectural decisions. As long as the foundations were in place, such as ensuring end-to-end TypeScript, visual regression tests and Terraform plans caught regressions to allow easier refactoring and tackle technical debt as they come in at unprecedented pace.
 
-Around them sit a monitoring job, a shared design system (Roots) with platform-neutral design tokens, and an early mobile app.
+Agentic workflows with access to tools which was used to help write tech specs and with low-level implementation plans, combined with project management tools to create PRDs and CI/CD processes like automated-code reviews allowed us to move fast but responsibly with a small team.
 
-{/* <BaseImage src="projects/trellis/featured-image" alt="myTrellis invoice dashboard" caption="The customer app, running on demo data." /> */}
+### High-level feature development workflow
+
+Whenever a new feature or enhancement is introduced into the application, it starts with myself setting the goals, making sure the architecture decisions and what is shipped is to the quality I set. Agents and automation do the drafting, building and checking in between.
+
+<BaseImage
+  src="projects/trellis/ai-workflow"
+  alt="Diagram of AI-assisted development: idea, draft spec, review spec, plan and build, guardrails, then review and ship. The idea, spec review and final review and ship steps are mine; a changes-needed arrow returns from review to build."
+  caption="The darker boxes is where I intervene, the white being AI agents"
+/>
 
 ## Architecture
 
-Shared application servers, one PostgreSQL database per customer, and a small shared service that keeps track of which customer is which. Every request is scoped to a single customer before any data is touched.
+<BaseImage
+  src="projects/trellis/architecture"
+  alt="Diagram: customer and admin apps call shared application servers. The servers look up which customer a request belongs to in a customer directory, then work only with that customer's own database. Scheduled jobs sweep each customer's database, and payments, email and document storage are external services."
+  caption="A simplified view of the platform: shared servers, one database per customer and a small directory that knows which customer is which."
+/>
 
-### Typed end to end
-
-Schemas are shared between the back end and the front ends, and the front ends consume generated, typed API clients. A change to an API surfaces as a compile error in the apps rather than a bug in production, and both APIs respond in one consistent shape.
-
-### Design system
-
-Roots is a Storybook-documented package: shadcn primitives as foundations, compound components (forms, data, tags, status, media, navigation) on top, and a tokens package that generates both the web CSS and a mobile theme so every surface shares the same visual language.
-
-{/* <BaseImage src="projects/trellis/roots" alt="Roots design system components" caption="Roots: compound components documented and interaction-tested in Storybook." /> */}
+Shared application servers, one PostgreSQL database per customer and a small directory that tracks which customer is which. Every request is scoped to a single customer before any data is touched.
 
 ## Key decisions
 
-{/* TODO: confirm each "why" matches your actual reasoning. Keep it short; the long decision records were removed for length. */}
+- **PostgreSQL over Firestore and other NoSQL.** Invoicing data is deeply relational and has to stay consistent, so I wanted real transactions, constraints and joins. Firestore is quick to start, and I have used it in production, but filtering and reporting became painful as the product grew. In Postgres, a new report is just a new query over the data I already have.
+- **JSONB where data is flexible.** Addresses, bank details and other custom structures vary in shape and are read and written as a whole, so they live as JSONB in the same database. Each shape is defined once as a Zod schema, which validates the data and gives me the TypeScript type from database to front end.
+- **A database per customer.** Stronger isolation than row-level tenancy, and simple per-customer backup, restore and deletion. The cost is operational: every schema change has to reach every database (see below).
+- **Data stays in Australia.** The servers, customer databases and backups all run in Australia, with backups copied to a second Australian location, and AI model processing happens here too. The exceptions are the third-party services for payments and email.
+- **Traceability by design.** For financial records, "what happened, who did it and when" is a feature. In the app, quotes and invoices carry an activity timeline and documents keep frozen snapshots of client and business details, so editing an address never rewrites history. In the back end, an audit trail records who acted (an administrator or an AI agent), what they did and to what, and tracing follows requests across the apps and APIs.
+- **better-auth over Supabase.** better-auth runs inside my own API, so identity lives in my own Postgres with no separate vendor holding users and sessions. It suits a model where one identity spans the customer and console apps but sessions are scoped to a single customer, and its two-factor, token and OAuth plugins cover sign-in and the flow AI assistants use to connect. The trade-off is that I own more of the security upkeep.
+- **Stripe Connect.** Each business keeps its own Stripe account and funds go straight to them. Stripe handles card details, never in myTrellis. Webhooks are used to transition invoice states based on transaction events.
 
-- **PostgreSQL, not a document store.** Invoicing data is deeply relational and has to stay consistent. A document database is quick to start but made efficient filtering and reporting painful as the product grew, so I chose a relational database that makes new questions a query rather than a restructure.
-- **A database per customer, provisioned automatically.** Stronger isolation than row-level tenancy, and simple per-customer backup, restore and deletion. The cost is operational: every schema change has to reach every database (see Challenges).
-- **Stripe Connect.** Each business keeps its own Stripe account and compliance relationship, funds go straight to them, and card details are handled by Stripe, never by myTrellis. That keeps the product a thin integration rather than a payments company.
-- **Per-customer feature toggles, with who/when change tracking.** Features can be turned on for individual customers, and every change records who made it and when, so behaviour differences between customers can be explained.
-- **Frozen snapshots on documents.** An invoice keeps the client and business details as they were when it was created, so editing an address later never rewrites history.
-- **CSV import with validation preview and rollback.** Users see what will change before data is committed and can undo an import.
-- **Scheduled automation for reminders and recurring invoices.** Overdue invoices and expiring quotes are handled by scheduled jobs rather than relying on users to remember.
-
-## Challenges
+## Engineering problems faced
 
 ### Schema changes across many databases
 
-With one database per customer, "run the migration" is not one operation. A change is only live once it has reached every customer's database, and the release has to fail safely if any of them does not. I designed around the usual traps: changes follow an expand-and-contract pattern so old and new code can briefly coexist, and risky changes are split into small, reversible steps.
+With a database per customer, "run the migration" is not one operation. A fan-out runner migrates every active customer, retries transient connection errors and fails the deploy before the new code goes live if any customer fails. Migrations only move forward, so changes follow an expand-and-contract pattern: old and new code can coexist, and risky changes are split into small, reversible steps.
 
 ### Payments in an isolated-data world
 
-External payment events do not know about our customer boundaries. Mapping them back to the right customer without weakening isolation meant treating every inbound event as untrusted until verified, making processing safe to repeat, and reconciling anything that was missed.
+Stripe delivers every connected account's events to one endpoint, with no customer identity attached. Each event is signature-verified, mapped back to the right customer through a small shared index, then checked again independently before any payment is credited, so a routing bug cannot credit the wrong customer. Processing is idempotent, so Stripe's retries are safe, and failures are recorded and retried.
 
-{/* <BaseImage src="projects/trellis/invoice-pay" alt="Invoice with pay link and QR code" caption="Each invoice has a pay link and QR code, settled through the business's own Stripe account." /> */}
+### Provisioning and recovering safely
 
-### Provisioning that fails safely
+Creating a customer means creating and migrating a database, which can fail halfway. Provisioning is an explicit state machine (pending, active, failed) with automatic retries and backoff, an alert when failures cluster and a retry from the console. Per-customer backups are restored into an isolated environment and reviewed first, so one customer can be recovered without touching the others.
 
-Creating a customer means creating and preparing a database, which can fail halfway. Provisioning has explicit failure states, automatic retries and alerting, so a bad signup is visible and recoverable instead of silent.
+## Application design
 
-### Recovering one customer
+Two applications on one platform:
 
-Whole-platform recovery tools cannot restore a single customer without touching the others. Per-customer backups, restored into an isolated environment first and reviewed before anything goes live, make recovery precise and low risk.
+- **Platform app**: where each business (tenant) manages clients, quotes, invoices, recurring invoices, expenses and reporting, sends invoices with payment options and syncs statuses with payment providers.
+- **Console app**: internal tooling for operating the product and monitoring customers. During the alpha it also provisions tenants manually and triggers the onboarding workflow.
 
-## Governance and security
+### From quote to invoice
 
-- Two-factor authentication, role-based access and an audit trail of administrative actions.
-- Secrets are kept out of the codebase.
+Quotes are drafted, sent and accepted, then converted into invoices in one step that keeps a link to the source quote. Behind the flow, each document freezes the client and business details at the moment it is created, payments are processed idempotently, and every invoice PDF carries a QR code for its pay link.
 
-{/* TODO: keep this section deliberately short. Do not add specifics about access controls, network restrictions or admin tooling. */}
+<div class="not-prose my-8 grid gap-8 md:grid-cols-2">
+  <BaseImage
+    src="projects/trellis/flow-quote-accepted"
+    sizes="(min-width: 768px) 368px, 100vw"
+    alt="An accepted quote with a Convert to Invoice button and an activity timeline recording each step"
+    width={1000}
+    caption="An accepted quote, ready to convert. The activity timeline records each step."
+  />
+  <BaseImage
+    src="projects/trellis/invoice-pdf-qr"
+    sizes="(min-width: 768px) 368px, 100vw"
+    alt="The bottom of an invoice PDF showing the total, payment information and a QR code to pay by card online"
+    width={1000}
+    caption="The PDF invoice, with a QR code for paying online."
+  />
+</div>
 
-## Delivery
+### The design system and type safety
 
-CI/CD runs on GitHub Actions to Google Cloud, with infrastructure defined as code in Terraform.
+- **Typed end to end.** Zod schemas are shared between the back end and front ends, which use generated API clients, so an API change shows up as a compile error rather than a production bug.
+- **A design system.** Roots is a Storybook-documented component library, with design tokens that generate both the web CSS and a mobile theme.
+- **Safe imports.** CSV import shows a validation preview before anything is committed, and can be rolled back.
 
-- **Automated gates.** Every change runs through automated tests before it can be released.
-- **Deploy is not release.** Production changes are deployed, health-checked and then deliberately promoted by a person.
-- **Safe by default.** Backups are required before risky changes.
+<BaseImage
+  src="projects/trellis/storybook"
+  alt="Storybook showing the Roots design system, with a data table and status cards in their loading state and the component controls below"
+  caption="Roots in Storybook: compound components, such as this data table with status cards, are documented and interaction-tested."
+/>
 
-## Quality and observability
+<BaseImage
+  src="projects/trellis/invoice-csv-import-validation"
+  alt="The CSV import details page listing validation errors by row, with the Import button disabled"
+  caption="CSV import: every row is validated and any problems are listed before anything is imported."
+/>
 
-- **Tests**: unit and integration tests, interaction tests for the design system, and end-to-end and visual regression tests, with a coverage floor enforced in CI.
-- **Observability**: distributed tracing and error monitoring across the apps and APIs.
-- **Monitoring job**: a scheduled job that checks platform health and alerts the team.
+## How it's built and run
 
-## Public site and documentation
+myTrellis runs on Google Cloud, with infrastructure defined in Terraform and every deployment run by GitHub Actions, so nothing is changed by hand.
 
-Alongside the product sits a second monorepo for everything public-facing. Two Next.js apps share a small UI package and a single source of truth for URLs.
+- **Environments.** Development, UAT and production share the same Terraform modules. Changes are planned before they are applied, production applies a reviewed plan, and drift is checked on a schedule.
+- **Releases.** Production changes are deployed with no traffic, health-checked and only go live when a person promotes them, with a backup required before risky changes.
+- **Quality and security.** Unit, integration, interaction and visual regression tests, tracing and error monitoring, plus two-factor authentication, role-based access and secrets kept out of the codebase.
 
-- **[mytrellis.io](https://mytrellis.io)**: the marketing site. Today it is a deliberate holding page (logo, light and dark theme, a link to the docs) while the product is in alpha. {/* TODO: update when the real marketing site ships, or drop this bullet if you would rather not mention the holding page. */}
-- **[docs.mytrellis.io](https://docs.mytrellis.io)**: the product documentation, built with Fumadocs. It is written as a step-by-step alpha user guide for non-technical testers: getting started, core tasks (clients, quotes, invoices, line items, expenses), getting paid (online payments, reminders, recording payments), importing data from CSV, and going further (reports, recurring invoices, branding).
+A second monorepo holds the marketing site at [mytrellis.io](https://mytrellis.io), currently a holding page during the alpha, and the product documentation at [docs.mytrellis.io](https://docs.mytrellis.io), built with Fumadocs. The docs are a step-by-step guide for non-technical testers, written around what a business owner is trying to do rather than feature names.
 
-A few details I'm happy with:
-
-- **Screenshots as a component.** Each guide embeds one component that shows a desktop and a phone capture side by side with click-to-zoom. Captures are converted to WebP by a script, so pages stay light without anyone thinking about it.
-- **Task-shaped content.** Every page starts from something a business owner is trying to do, not from a feature name. Search keywords and icons are set per page, and the CSV import guides include downloadable template cards.
-- **Same engineering standards as the product.** Conventional Commits enforced by commitlint and husky, linting and formatting in CI, a coverage floor, and Storybook for the shared UI package.
-
-{/* <BaseImage src="projects/trellis/docs-home" alt="myTrellis documentation site" caption="docs.mytrellis.io: a Fumadocs site written as a task-based alpha user guide." /> */}
-{/* <BaseImage src="projects/trellis/docs-guide" alt="A myTrellis guide page with desktop and phone screenshots" caption="Each guide pairs a desktop and a phone capture, with click-to-zoom." /> */}
-
-Two more pieces round out the documentation:
-
-- **myTrellis Atlas** is a living feature directory written for non-engineers, so anyone can see what the product does without reading code. {/* TODO: link to Atlas */}
-- **Engineering docs** are written as decision records: they state the choice, the alternatives rejected and the trade-offs. They are internal.
+<BaseImage
+  src="projects/trellis/docs"
+  alt="The myTrellis documentation introduction page, with guides grouped into start here, core tasks, getting paid, importing data and help"
+  caption="docs.mytrellis.io: a Fumadocs site written as a task-based alpha user guide."
+/>
 
 ## What I learned
 
-{/* TODO: 2 to 4 honest takeaways in your own words. Suggested angles: what multi-tenancy costs operationally, designing for the failure case first, documenting trade-offs as part of the design. */}
+The closed alpha taught me more than any amount of planning, and mostly about things other than code.
 
-## Related project
+- **Monitoring comes first.** Foundations like Sentry showed me bugs that test users rarely report. Most people hit a problem, shrug and move on.
+- **Alpha tests real behaviour.** It was the first real test of the multi-tenant design, confirming that no tenant could see another tenant's data, and it exercised the whole onboarding flow: welcome emails and the password and account set-up journeys.
+- **Costs need watching early.** Around a dozen tenants showed me the baseline storage and compute cost of each, so I could keep it tight.
+- **Release discipline matters once people use it.** Testers were working in UAT, so I could no longer deploy features there whenever I liked.
+- **Know what an alpha is for.** It is about readiness, not feedback volume. Friends and family are generous, but they rarely use a product without being prompted, so set expectations accordingly.
 
-AI features for myTrellis, including an MCP server for AI assistants and an invoice scanner, are covered in their own case study.
+## Next case study: myTrellis AI
+
+The AI work sits on the same platform, with the same guardrails: an MCP server with scoped OAuth and an audit trail of agent activity, and an invoice scanner where a person approves every record. It has its own case study.
 
 <RelatedProject slugs={['trellis-ai']} />

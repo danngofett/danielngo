@@ -1,0 +1,18 @@
+%% How AI-assisted development fits the myTrellis workflow, and where I fit in.
+%% Dark steps are mine; light steps are done by AI agents and automation.
+%% Deliberately high level: no tool configuration, prompts or secrets.
+%% output: src/assets/images/projects/trellis/ai-workflow.png
+%% spacing: 30 40
+flowchart LR
+  A["<b>Idea</b><br/>what to build<br/>and why"]
+  B["<b>Draft spec</b><br/>in Confluence,<br/>with up-to-date<br/>docs (Context7)"]
+  C["<b>Review spec</b><br/> decisions, make corrections, elaborate on decisions"]
+  D["<b>Plan and build</b><br/>tickets in Jira,<br/>code and tests<br/>together"]
+  E["<b>Guardrails</b><br/>types, tests,<br/>visual regression,<br/>AI code review"]
+  F["<b>Review and ship</b><br/>I approve,<br/>merge and<br/>promote"]
+
+  A --> B --> C --> D --> E --> F
+  F -->|"changes needed"| D
+
+  classDef me fill:#111827,stroke:#111827,color:#ffffff
+  class A,C,F me
