@@ -1,0 +1,26 @@
+---
+import BaseHead from '@components/BaseHead.astro'
+import CV from '@components/cv/CV.jsx'
+---
+
+<html lang="en">
+  <head>
+    <BaseHead
+      title="CV | Daniel Ngo"
+      description="Curriculum vitae of Daniel Ngo, senior full-stack engineer."
+      noindex
+    />
+  </head>
+
+  <body class="bg-white text-neutral-900">
+    <CV />
+  </body>
+</html>
+
+<style is:global>
+  @media print {
+    html {
+      font-size: 10.5px;
+    }
+  }
+</style>

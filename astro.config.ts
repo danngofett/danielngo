@@ -22,6 +22,7 @@ export default defineConfig({
     mdx(),
     sitemap({
       filter: (page) =>
+        !page.endsWith('/cv/') &&
         !unlistedProjectPaths.some((path) => page.endsWith(path)),
     }),
     react(),

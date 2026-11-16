@@ -1,0 +1,6 @@
+export * from './details'
+export * from './education'
+export * from './experience'
+export * from './skills'
+export * from './projects'
+export * from './references'
