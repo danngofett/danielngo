@@ -1,0 +1,15 @@
+%% Development workflow for the myTrellis case study.
+%% Deliberately high level: no tool configuration, branch rules or secrets.
+%% output: src/assets/images/projects/trellis/workflow.png
+%% spacing: 30 40
+flowchart LR
+  A["<b>Spec</b><br/>PRD, then an<br/>AI-assisted plan<br/>I review"]
+  B["<b>Build</b><br/>feature branch,<br/>tests and local<br/>checks"]
+  C["<b>Review</b><br/>automated<br/>checks, AI review,<br/>then mine"]
+  D["<b>Merge</b><br/>deploys to<br/>dev"]
+  E["<b>Release</b><br/>UAT, then a<br/>health-checked<br/>candidate"]
+  F["<b>Promote</b><br/>manual step<br/>to production"]
+
+  A --> B --> C
+  C -->|"changes needed"| B
+  C ==> D ==> E ==> F
