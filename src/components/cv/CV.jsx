@@ -34,7 +34,7 @@ function CV() {
         </div>
 
         {/* Skills */}
-        <div className="space-y-4">
+        <div className="space-y-4 print:text-[0.9rem]">
           <h2 className="text-2xl font-bold">Core Technical Skills</h2>
 
           <dl className="space-y-1">
@@ -51,7 +51,7 @@ function CV() {
         </div>
 
         {/* Experience */}
-        <div className="space-y-6 print:space-y-4">
+        <div className="space-y-6 print:space-y-4 print:text-[0.9rem]">
           <h2 className="text-2xl font-bold">Professional Experience</h2>
 
           {EXPERIENCE.map((experience) => (
@@ -92,7 +92,7 @@ function CV() {
         </div>
 
         {/* Projects */}
-        <div className="space-y-6 print:space-y-4">
+        <div className="space-y-6 print:space-y-4 print:text-[0.9rem]">
           <h2 className="text-2xl font-bold">Selected Projects</h2>
 
           {PROJECTS.map((project) => (
@@ -125,7 +125,7 @@ function CV() {
         </div>
 
         {/* Education */}
-        <div className="space-y-4">
+        <div className="space-y-4 print:text-[0.9rem]">
           <h2 className="text-2xl font-bold">Education</h2>
 
           <div className="grid grid-cols-3 gap-12 print:gap-6">
@@ -145,7 +145,7 @@ function CV() {
         </div>
 
         {/* References */}
-        <div className="space-y-3">
+        <div className="space-y-3 print:text-[0.9rem]">
           <h2 className="text-2xl font-bold">References</h2>
           <p>{REFERENCES}</p>
         </div>

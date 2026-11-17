@@ -14,7 +14,7 @@ export const PROJECTS: Project[] = [
     date: '2026 - Present',
     role: 'Sole Designer and Engineer',
     description:
-      'myTrellis is a multi-tenant invoicing platform for sole traders and small businesses. Its AI layer lets assistants like Claude and ChatGPT draft invoices through an MCP server, and turns a PDF or photo into a draft. AI only drafts: totals and dates are computed in code, and a person approves every record.',
+      'myTrellis is a multi-tenant invoicing platform for sole traders and small businesses. Its AI layer lets assistants like Claude and ChatGPT draft invoices through an MCP server, and turns a PDF or photo into a draft. AI access is intentionally scoped, totals are computed in code, and the tenant approves every record.',
     url: 'mytrellis.io',
     responsibilities: [
       'Built an MCP server using standards-based OAuth, with explicit consent, least-privilege access, instant revocation and an audit trail of agent activity.',

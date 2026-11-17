@@ -23,7 +23,8 @@ import CV from '@components/cv/CV.jsx'
 <style is:global>
   @media print {
     html {
-      font-size: 10.5px;
+      /* !important: global print styles also set a base size. */
+      font-size: 10.5px !important;
     }
   }
 </style>

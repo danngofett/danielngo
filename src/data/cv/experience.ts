@@ -39,7 +39,7 @@ export const EXPERIENCE: Experience[] = [
     date: '2021 - 2024',
     logo: '/cv/logos/monash-university.webp',
     bullets: [
-      'Architected and maintained monash.edu and the university-wide Design System (Storybook/Figma), adopted across the domain.',
+      'Uplifted the existing monash.edu onto a newer, more modern university-wide Design System (Storybook/Figma) that I helped develop and maintain, adopted across the domain.',
       'Led front-end architecture and delivery of the Monash Staff Portal (staff.monash.edu) using Next.js, TypeScript, Turborepo, Okta/Firebase Auth and GCP Cloud Run.',
       'Delivered Monash Enrich (enrich.monash.edu), a student-facing platform serving 100,000+ students, shipping search and quiz features under a strict 3-month deadline using Google App Engine.',
       'Spearheaded WCAG 2.1 accessibility compliance, automated Playwright E2E testing and core web performance optimisations.',

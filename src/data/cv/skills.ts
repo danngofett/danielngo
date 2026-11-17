@@ -56,6 +56,9 @@ export const SKILLS: SkillGroup[] = [
     label: 'AI & Agentic Workflows',
     items: [
       'MCP (Model Context Protocol)',
+      'AI Context Engineering',
+      'RAG',
+      'Machine Learning (ML)',
       'Google ADK',
       'Vertex AI',
       'Gemini',
@@ -83,7 +86,7 @@ export const SKILLS: SkillGroup[] = [
     label: 'Leadership & Delivery',
     items: [
       'Technical Leadership',
-      'Architecture',
+      'Solution Architecture',
       'Mentorship',
       'P1 Incident Management',
     ],

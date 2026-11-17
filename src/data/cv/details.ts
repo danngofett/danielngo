@@ -5,5 +5,5 @@ export const DETAILS = {
   phone: '+61 482 975 460',
   linkedin: 'linkedin.com/in/dango',
   introduction:
-    'Senior Full-Stack Engineer with 10+ years of experience shipping production-ready applications, with a design lens and roots in web development. End-to-end—from accessible UIs and design systems (WCAG) built with React/Next.js and TypeScript, to custom APIs in Node.js/NestJS, enterprise platform integrations, GCP/Terraform cloud architecture, and AI agent workflows with MCP and Vertex AI.',
+    'Senior Full-Stack Engineer with 10+ years of experience shipping accessible, production-grade web applications. End-to-end expertise across React/Next.js, TypeScript, and WCAG design systems, through Node.js/NestJS APIs, enterprise integrations, GCP/Terraform architecture, and AI agent workflows (MCP, RAG, context engineering)',
 }
