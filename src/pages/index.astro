@@ -9,7 +9,7 @@ import Icon from '@components/Icon.astro'
 import FeaturedProjects from '@components/FeaturedProjects.astro'
 import { getCollection } from 'astro:content'
 
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
+import { SITE_TITLE, HOME_TITLE, SITE_DESCRIPTION } from '../consts'
 
 const projects = (await getCollection('projects')).filter(
   (entry) => import.meta.env.DEV || (!entry.data.draft && !entry.data.unlisted),
@@ -35,7 +35,7 @@ const FOCUS_AREAS = [
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} preloadMedium />
+    <BaseHead title={HOME_TITLE} description={SITE_DESCRIPTION} preloadMedium />
   </head>
 
   <body class="bg-white transition duration-500 dark:bg-slate-900">

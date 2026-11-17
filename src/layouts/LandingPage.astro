@@ -6,13 +6,13 @@ import Container from '@components/Container.astro'
 
 const { title, seo_title, seo_description, featured_image_src } = Astro.props
 
-const SEO_TITLE = seo_title ? `${seo_title} | ` : ''
+const SEO_TITLE = seo_title ?? 'Daniel Ngo | Full-Stack Engineer in Melbourne'
 ---
 
 <html lang="en">
   <head>
     <BaseHead
-      title={`${SEO_TITLE}Daniel Ngo`}
+      title={SEO_TITLE}
       description={seo_description}
       image={featured_image_src}
     />
