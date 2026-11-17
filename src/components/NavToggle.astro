@@ -5,8 +5,14 @@ const { isActive } = Astro.props
 ---
 
 <nav-toggle>
-  <button class="rounded-full border p-1 transition-colors hover:border-slate-600 dark:text-white">
-    <span class="icon visible md:hidden">
+  <button
+    type="button"
+    class="flex size-11 items-center justify-center rounded-full border transition-colors hover:border-slate-600 dark:text-white"
+    aria-label={isActive ? 'Close menu' : 'Open menu'}
+    aria-controls="nav-drawer"
+    aria-expanded="false"
+  >
+    <span class="icon visible lg:hidden" aria-hidden="true">
       {isActive ? <Icon icon="close" /> : <Icon icon="hamburger" />}
     </span>
   </button>
@@ -15,43 +21,59 @@ const { isActive } = Astro.props
 <script>
   import debounce from 'lodash.debounce'
 
+  const root = document.documentElement
+  const isActive = () => root.classList.contains('nav-active')
+
+  // Single source of truth: the class on <html>, mirrored to aria-expanded on
+  // every toggle and to `inert` on the drawer so its links are unreachable
+  // (tab and screen reader) while it is closed.
+  const setActive = (active: boolean) => {
+    root.classList.toggle('nav-active', active)
+    document.getElementById('nav-drawer')?.toggleAttribute('inert', !active)
+    document
+      .querySelectorAll('nav-toggle button')
+      .forEach((button) => button.setAttribute('aria-expanded', String(active)))
+  }
+
   class NavToggle extends HTMLElement {
     constructor() {
       super()
 
       const button = this.querySelector('button')!
 
-      const setTheme = (isActive: boolean) => {
-        document.documentElement.classList[isActive ? 'add' : 'remove'](
-          'nav-active',
-        )
-        button.setAttribute('aria-pressed', String(isActive))
-      }
+      button.addEventListener('click', () => {
+        const next = !isActive()
+        setActive(next)
 
-      button.addEventListener('click', () => setTheme(!this.isActive()))
-
-      setTheme(this.isActive())
-
-      this.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && this.isActive()) {
-          setTheme(false)
-        }
+        // Move focus into the drawer on open, back to the opener on close.
+        const target = next
+          ? '#nav-drawer nav-toggle button'
+          : '[data-nav-opener] nav-toggle button'
+        document.querySelector<HTMLElement>(target)?.focus()
       })
-
-      window.addEventListener(
-        'resize',
-        debounce(() => {
-          if (window.innerWidth > 768) {
-            setTheme(false)
-          }
-        }, 250),
-      )
-    }
-
-    isActive() {
-      return document.documentElement.classList.contains('nav-active')
     }
   }
 
   customElements.define('nav-toggle', NavToggle)
+
+  // Page-level listeners, registered once (the element is used twice).
+  setActive(isActive())
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && isActive()) {
+      setActive(false)
+      document
+        .querySelector<HTMLElement>('[data-nav-opener] nav-toggle button')
+        ?.focus()
+    }
+  })
+
+  window.addEventListener(
+    'resize',
+    debounce(() => {
+      if (window.innerWidth >= 1024) {
+        setActive(false)
+      }
+    }, 250),
+  )
 </script>

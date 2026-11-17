@@ -11,9 +11,9 @@ const isActive = href === pathname || href === pathname.replace(/\/$/, '')
 
 <a
   href={href}
-  class="hover:after:"
+  aria-current={isActive ? 'page' : undefined}
   class:list={[
-    'underline-animation text-secondary outline- inline-block text-lg font-normal whitespace-nowrap focus:outline-2 active:focus:outline-0',
+    'underline-animation text-secondary inline-block text-lg font-normal whitespace-nowrap',
     className,
     { active: isActive },
   ]}

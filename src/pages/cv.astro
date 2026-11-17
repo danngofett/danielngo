@@ -3,6 +3,7 @@ import BaseHead from '@components/BaseHead.astro'
 import CV from '@components/cv/CV.jsx'
 ---
 
+<!doctype html>
 <html lang="en">
   <head>
     <BaseHead
@@ -13,7 +14,9 @@ import CV from '@components/cv/CV.jsx'
   </head>
 
   <body class="bg-white text-neutral-900">
-    <CV />
+    <main id="main">
+      <CV />
+    </main>
   </body>
 </html>
 

@@ -33,6 +33,8 @@ const posts = entries.filter((entry) => {
     </div>
   )}
 
+  <h2 class="sr-only">All travels</h2>
+
   <div class="grid gap-4 lg:grid-cols-3">
     {posts.map((entry) => {
       return <Card post={entry} />

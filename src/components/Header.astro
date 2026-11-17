@@ -8,19 +8,26 @@ import NavDrawer from './NavDrawer.astro'
 import Container from './Container.astro'
 ---
 
+<a
+  href="#main"
+  class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:rounded-md focus:bg-black focus:px-4 focus:py-2 focus:text-white dark:focus:bg-white dark:focus:text-black"
+>
+  Skip to content
+</a>
+
 <Container>
-  <nav class="flex items-center justify-between gap-4 py-4 md:py-6">
+  <div class="flex items-center justify-between gap-4 py-4 md:py-6">
     <div class="logo flex items-center gap-2 text-2xl dark:text-white">
       <div class="w-10" aria-hidden="true">
         <Icon icon="danielngo" aria-hidden="true" />
       </div>
 
-      <a class="underline-animation" href="/">
+      <a class="underline-animation font-bold" href="/">
         {SITE_TITLE}
       </a>
     </div>
 
-    <div class="hidden gap-4 lg:flex dark:text-white">
+    <nav aria-label="Main" class="hidden gap-4 lg:flex dark:text-white">
       <HeaderLink class="px-5 py-2" href="/">
         Home
       </HeaderLink>
@@ -34,16 +41,16 @@ import Container from './Container.astro'
       <HeaderLink class="px-5 py-2" href="/travels">
         Travels
       </HeaderLink>
-    </div>
+    </nav>
 
     <NavDrawer />
 
     <div class="flex gap-4">
-      <div class="md:hidden">
+      <div class="lg:hidden" data-nav-opener>
         <NavToggle />
       </div>
 
       <ThemeToggle />
     </div>
-  </nav>
+  </div>
 </Container>

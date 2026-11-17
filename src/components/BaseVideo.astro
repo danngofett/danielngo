@@ -9,7 +9,7 @@ const { src, type = 'video/mp4', caption } = Astro.props
 ---
 
 <div class="relative h-0 overflow-hidden pb-[56.25%]">
-  <video class="absolute top-0 left-0 object-cover w-full h-full">
+  <video controls preload="metadata" playsinline class="absolute top-0 left-0 object-cover w-full h-full">
     <source src={src} type={`video/${type}`} />
     <p class="text-gray-700">Your browser does not support the video tag.</p>
   </video>

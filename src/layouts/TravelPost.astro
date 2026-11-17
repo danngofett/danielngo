@@ -19,9 +19,9 @@ const { title, seo_title, seo_description, featured_image_src } = Astro.props
   <body class="bg-white transition duration-500 dark:bg-slate-900">
     <Header />
 
-    <main>
+    <main id="main" tabindex="-1">
       <Container>
-        <h1>{title}</h1>
+        {title && <h1>{title}</h1>}
 
         <div class="flex flex-col gap-8 md:gap-16 lg:gap-24">
           <slot />

@@ -20,6 +20,7 @@ export const TextReveal = ({
   const reducedMotion = useReducedMotion()
 
   const [index, setIndex] = useState(0)
+  const [paused, setPaused] = useState(false)
   const measureRefs = useRef<(HTMLSpanElement | null)[]>([])
   const [widths, setWidths] = useState<number[]>([])
 
@@ -44,7 +45,14 @@ export const TextReveal = ({
   })
 
   useEffect(() => {
-    if (reducedMotion) {
+    const onToggle = (event: Event) =>
+      setPaused((event as CustomEvent<{ paused: boolean }>).detail.paused)
+    window.addEventListener('rotating-text:toggle', onToggle)
+    return () => window.removeEventListener('rotating-text:toggle', onToggle)
+  }, [])
+
+  useEffect(() => {
+    if (reducedMotion || paused) {
       return
     }
 
@@ -56,7 +64,7 @@ export const TextReveal = ({
     )
 
     return () => clearInterval(interval)
-  }, [words.length, duration, delay, reducedMotion])
+  }, [words.length, duration, delay, reducedMotion, paused])
 
   return (
     <div
@@ -103,9 +111,13 @@ export const TextReveal = ({
         </span>
       ))}
 
+      {/* Screen readers get the full list once, instead of a changing word. */}
+      <span className="sr-only">{words.join(', ')}</span>
+
       {transitions((style, item) => (
         <AnimatedSpan
           key={item}
+          aria-hidden
           className="absolute top-0 left-0 w-full text-black dark:text-white"
           style={{
             opacity: style.opacity,

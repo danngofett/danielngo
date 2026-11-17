@@ -5,6 +5,7 @@ import Footer from '@components/Footer.astro'
 import Button from '@components/Button.astro'
 import TextReveal from '@components/TextReveal'
 import Container from '@components/Container.astro'
+import Icon from '@components/Icon.astro'
 import FeaturedProjects from '@components/FeaturedProjects.astro'
 import { getCollection } from 'astro:content'
 
@@ -16,74 +17,136 @@ const projects = (await getCollection('projects')).filter(
 
 const FOCUS_AREAS = [
   'AI agents',
-  'secure production-ready systems',
-  'API and system integration',
-  'HITL workflow automation',
+  'secure systems',
+  'API integration',
+  'HITL workflows',
   'MCP servers',
   'agent orchestration',
-  'UI and design systems',
+  'system integration',
+  'workflow automation',
+  'UI engineering',
   'accessible interfaces',
-  'leading teams and mentoring',
+  'design systems',
+  'leading teams',
+  'mentoring',
 ]
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} preloadMedium />
   </head>
 
-  <body class="antialiased bg-white transition duration-500 dark:bg-slate-900">
+  <body class="bg-white transition duration-500 dark:bg-slate-900">
     <h1 class="sr-only">{SITE_TITLE}</h1>
 
     <Header title={SITE_TITLE} />
 
-    <Container>
-      <header class="flex flex-col gap-12 px-4 py-12 md:gap-24 md:py-24 lg:py-36">
-        <div class="flex items-center gap-24">
-          <div class="grid lg:grid-cols-5">
-            <div class="col-span-3 py-3">
-              <h2 class="text-2xl leading-tight text-black sm:text-3xl md:text-4xl dark:text-white">
-                Full-stack engineer building production-ready systems with a
-                focus on
-                <TextReveal
-                  className="min-[440px]:align-bottom"
-                  client:load
-                  words={FOCUS_AREAS}
-                  duration={1000}
-                />
-              </h2>
+    <main id="main" tabindex="-1">
+      <Container>
+        <header class="flex flex-col gap-12 px-4 py-12 md:gap-24 md:py-24 lg:py-36">
+          <div class="flex items-center gap-24">
+            <div class="grid lg:grid-cols-5">
+              <div class="col-span-3 py-3 lg:col-span-4 xl:col-span-3">
+                <h2 class="text-2xl leading-tight font-normal text-black sm:text-[27px] md:text-[32px] dark:text-white">
+                  Full-stack engineer building production-ready systems with a
+                  focus on
+                  <TextReveal
+                    className="font-bold min-[440px]:align-bottom"
+                    client:load
+                    words={FOCUS_AREAS}
+                    duration={1000}
+                  />
+                </h2>
+
+                <div class="tooltip-host mt-4 inline-block print:hidden motion-reduce:hidden">
+                  <button
+                    type="button"
+                    id="rotating-text-toggle"
+                    class="flex size-11 cursor-pointer items-center justify-center rounded-full border text-black transition-colors hover:border-slate-600 dark:text-white"
+                    aria-label="Pause animation"
+                  >
+                    <span id="rotating-text-pause" aria-hidden="true">
+                      <Icon icon="pause" />
+                    </span>
+                    <span id="rotating-text-play" aria-hidden="true" hidden>
+                      <Icon icon="play" />
+                    </span>
+                  </button>
+
+                  <span
+                    id="rotating-text-tooltip"
+                    class="tooltip absolute top-full left-0 z-50 mt-2 rounded-md bg-slate-900 px-3 py-1.5 text-sm whitespace-nowrap text-white shadow-lg ring-1 ring-white/20 dark:bg-white dark:text-slate-900 dark:ring-black/10"
+                    aria-hidden="true"
+                  >
+                    Pause animation
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="mr-auto flex flex-col gap-4">
-          <div>
-            <Button href="/projects">View my projects</Button>
+          <div class="mr-auto flex flex-col gap-4">
+            <div>
+              <Button href="/projects">View my projects</Button>
+            </div>
+
+            <div>
+              <Button href="/travels" variant="secondary">
+                Follow my travels
+              </Button>
+            </div>
           </div>
+        </header>
+
+        <section class="flex flex-col gap-8 px-4 pb-24 lg:gap-12">
+          <h2 class="sr-only">Selected work</h2>
+
+          <FeaturedProjects entries={projects} showLabel={false} />
 
           <div>
-            <Button href="/travels" variant="secondary">
-              Follow my travels
+            <Button href="/projects" variant="secondary">
+              View all projects
             </Button>
           </div>
-        </div>
-      </header>
-
-      <section class="flex flex-col gap-8 px-4 pb-24 lg:gap-12">
-        <h2 class="text-2xl text-black md:text-3xl dark:text-white">
-          Selected work
-        </h2>
-
-        <FeaturedProjects entries={projects} showLabel={false} />
-
-        <div>
-          <Button href="/projects" variant="secondary">
-            View all projects
-          </Button>
-        </div>
-      </section>
-    </Container>
+        </section>
+      </Container>
+    </main>
     <Footer />
   </body>
 </html>
+
+<script>
+  // WCAG 2.2.2: let people pause the rotating words.
+  const toggle = document.getElementById('rotating-text-toggle')
+  const tooltip = document.getElementById('rotating-text-tooltip')
+  const pauseIcon = document.getElementById('rotating-text-pause')
+  const playIcon = document.getElementById('rotating-text-play')
+  let paused = false
+
+  toggle?.addEventListener('click', () => {
+    paused = !paused
+
+    const label = paused ? 'Play animation' : 'Pause animation'
+    toggle.setAttribute('aria-label', label)
+    if (tooltip) {
+      tooltip.textContent = label
+      tooltip.removeAttribute('data-dismissed')
+    }
+    if (pauseIcon) pauseIcon.hidden = paused
+    if (playIcon) playIcon.hidden = !paused
+
+    window.dispatchEvent(
+      new CustomEvent('rotating-text:toggle', { detail: { paused } }),
+    )
+  })
+
+  const rearm = () => tooltip?.removeAttribute('data-dismissed')
+  toggle?.parentElement?.addEventListener('pointerenter', rearm)
+  toggle?.addEventListener('focus', rearm)
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') tooltip?.setAttribute('data-dismissed', '')
+  })
+</script>

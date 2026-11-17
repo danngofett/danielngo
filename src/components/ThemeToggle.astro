@@ -2,38 +2,85 @@
 import Icon from './Icon.astro'
 ---
 
-<theme-toggle>
-  <button class="cursor-pointer rounded-full border p-2 transition-colors hover:border-slate-600 dark:text-white">
-    <span class="sr-only">Dark theme</span>
-
-    <span class="icon hidden dark:block">
-      <Icon icon="sun" />
+<theme-toggle class="tooltip-host block">
+  <button
+    type="button"
+    class="flex size-11 cursor-pointer items-center justify-center rounded-full border transition-colors hover:border-slate-600 dark:text-white"
+    aria-label="Switch to dark theme"
+  >
+    <span class="icon hidden dark:block" aria-hidden="true">
+      <Icon icon="sun" aria-hidden="true" />
     </span>
 
-    <span class="icon visible dark:hidden">
-      <Icon icon="moon" />
+    <span class="icon visible dark:hidden" aria-hidden="true">
+      <Icon icon="moon" aria-hidden="true" />
     </span>
   </button>
+
+  <!-- Visual tooltip only: the button's aria-label carries the same text for
+       assistive tech. Shown on hover and keyboard focus, hoverable, and
+       dismissible with Escape (WCAG 1.4.13). Hidden on touch screens. -->
+  <span
+    class="tooltip absolute top-full right-0 z-50 mt-2 rounded-md bg-slate-900 px-3 py-1.5 text-sm whitespace-nowrap text-white shadow-lg ring-1 ring-white/20 dark:bg-white dark:text-slate-900 dark:ring-black/10"
+    aria-hidden="true"
+    data-tooltip
+  >
+    Switch to dark theme
+  </span>
 </theme-toggle>
 
 <script>
   class ThemeToggle extends HTMLElement {
+    button: HTMLButtonElement
+    tooltip: HTMLElement
+
     constructor() {
       super()
 
-      const button = this.querySelector('button')!
+      this.button = this.querySelector('button')!
+      this.tooltip = this.querySelector('[data-tooltip]')!
+
       const theme = localStorage.getItem('theme')
 
       if (theme === 'dark') {
         this.setTheme(true)
       }
 
-      button.addEventListener('click', () => this.setTheme(!this.isDark()))
+      this.updateLabel()
+
+      this.button.addEventListener('click', () => {
+        this.setTheme(!this.isDark())
+        // Re-show after a click so the new label is announced visually.
+        this.tooltip.removeAttribute('data-dismissed')
+      })
+
+      // Re-arm the tooltip whenever the user starts a new hover or focus.
+      this.addEventListener('pointerenter', () =>
+        this.tooltip.removeAttribute('data-dismissed'),
+      )
+      this.button.addEventListener('focus', () =>
+        this.tooltip.removeAttribute('data-dismissed'),
+      )
+
+      // WCAG 1.4.13: the tooltip can be dismissed without moving the pointer
+      // or focus.
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          this.tooltip.setAttribute('data-dismissed', '')
+        }
+      })
     }
 
     setTheme(isDark: boolean) {
       document.documentElement.classList[isDark ? 'add' : 'remove']('dark')
       localStorage.setItem('theme', this.isDark() ? 'dark' : 'light')
+      this.updateLabel()
+    }
+
+    updateLabel() {
+      const label = `Switch to ${this.isDark() ? 'light' : 'dark'} theme`
+      this.button.setAttribute('aria-label', label)
+      this.tooltip.textContent = label
     }
 
     isDark() {

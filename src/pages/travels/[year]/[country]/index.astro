@@ -39,9 +39,17 @@ const { Content } = await render(entry)
   <Container>
     <div class="dark:text-white">
       <div class="flex items-center gap-2 py-8 md:py-16 lg:py-32 dark:text-white">
-        <Icon icon="arrow" className="h-6 w-6 rotate-90 transform" />
-        <a href="/travels" class="relative -top-px">
-          Back to travels
+        <a
+          href="/travels"
+          class="back-link group inline-flex items-center gap-2 rounded-sm"
+        >
+          <Icon
+            icon="arrow"
+            className="h-6 w-6 rotate-90 transform transition-transform duration-200 group-hover:-translate-x-1 group-focus-visible:-translate-x-1 motion-reduce:transition-none"
+          />
+          <span class="relative -top-px underline-offset-4 group-hover:underline group-focus-visible:underline">
+            Back to travels
+          </span>
         </a>
       </div>
     </div>

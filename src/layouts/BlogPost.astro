@@ -25,13 +25,21 @@ const { title, description, updatedDate, featured_image_src } = Astro.props
   <body class="bg-white transition duration-500 dark:bg-slate-900">
     <Header />
 
-    <main>
+    <main id="main" tabindex="-1">
       <div class="grid w-full grid-cols-4 gap-x-4 px-6 md:grid-cols-8 lg:grid-cols-12 lg:gap-x-6">
         <div class="mx-auto w-full lg:col-span-8 lg:col-start-3">
           <div class="mx-auto flex max-w-3xl items-center gap-2 py-32 dark:text-white">
-            <Icon icon="arrow" className="h-6 w-6 rotate-90 transform" />
-            <a href={`/projects`} class="relative -top-px">
-              Back to projects
+            <a
+              href={`/projects`}
+              class="back-link group inline-flex items-center gap-2 rounded-sm"
+            >
+              <Icon
+                icon="arrow"
+                className="h-6 w-6 rotate-90 transform transition-transform duration-200 group-hover:-translate-x-1 group-focus-visible:-translate-x-1 motion-reduce:transition-none"
+              />
+              <span class="relative -top-px underline-offset-4 group-hover:underline group-focus-visible:underline">
+                Back to projects
+              </span>
             </a>
           </div>
         </div>

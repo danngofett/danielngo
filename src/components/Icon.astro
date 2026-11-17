@@ -36,7 +36,13 @@ const getSVG = (name: string) => {
 const { icon, className, ...attributes } = Astro.props as Props
 const { attributes: baseAttributes, innerHTML } = getSVG(icon)
 
-const svgAttributes = { ...baseAttributes, ...attributes }
+// Icons are decorative by default; pass aria-hidden="false" plus a label to override.
+const svgAttributes = {
+  'aria-hidden': 'true',
+  focusable: 'false',
+  ...baseAttributes,
+  ...attributes,
+}
 ---
 
 <svg {...svgAttributes} set:html={innerHTML} class={className} />

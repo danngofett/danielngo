@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync } from 'node:fs'
-import { defineConfig } from 'astro/config'
+import { defineConfig, fontProviders } from 'astro/config'
 
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
@@ -27,6 +27,47 @@ export default defineConfig({
     }),
     react(),
   ],
+  // Graphik is self-hosted from src/assets/fonts. Weights 700 and 800 both use
+  // Bold so headings do not jump to Black.
+  experimental: {
+    fonts: [
+      {
+        name: 'Graphik',
+        cssVariable: '--font-graphik',
+        provider: fontProviders.local(),
+        fallbacks: ['system-ui', 'sans-serif'],
+        options: {
+          variants: [
+            {
+              weight: 400,
+              style: 'normal',
+              src: ['./src/assets/fonts/Graphik-Regular.woff2'],
+            },
+            {
+              weight: 400,
+              style: 'italic',
+              src: ['./src/assets/fonts/Graphik-RegularItalic.woff2'],
+            },
+            {
+              weight: 500,
+              style: 'normal',
+              src: ['./src/assets/fonts/Graphik-Medium.woff2'],
+            },
+            {
+              weight: 600,
+              style: 'normal',
+              src: ['./src/assets/fonts/Graphik-Semibold.woff2'],
+            },
+            {
+              weight: '700 800',
+              style: 'normal',
+              src: ['./src/assets/fonts/Graphik-Bold.woff2'],
+            },
+          ],
+        },
+      },
+    ],
+  },
   vite: {
     css: {
       transformer: 'postcss',

@@ -25,6 +25,7 @@ const posts = entries.filter((entry) => !entry.data.featured)
   <FeaturedProjects entries={entries} />
 
   <section>
+    <h2 class="sr-only">More projects</h2>
     <ul class="grid gap-8 md:grid-cols-2 md:gap-12 lg:grid-cols-3 lg:gap-8">
       {posts.map((post) => (
         <Card post={post} compact />
