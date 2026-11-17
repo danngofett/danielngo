@@ -23,7 +23,8 @@ const countries = await getCollection('travels').then((entry) => {
 })
 ---
 
-<LandingPageLayout seo_title={`Travel ${year}`}>
+<LandingPageLayout seo_title={`Travel ${year}`}
+  seo_description={`Travel stories and photos from my ${year} trips.`}>
   <IntroHeader title={`Travel ${year}`} description={`Travel ${year}`} />
 
   <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-12">

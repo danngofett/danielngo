@@ -32,6 +32,10 @@ const { Content } = await render(entry)
 
 <TravelPost
   seo_title={`${entry.data.country} | Day ${entry.data.day} | Daniel Ngo`}
+  seo_description={
+    entry.data.description ??
+    `Day ${entry.data.day} of my trip through ${entry.data.country}: ${entry.data.title}.`
+  }
   image={entry.data.featured_image_src}
 >
   <Container>

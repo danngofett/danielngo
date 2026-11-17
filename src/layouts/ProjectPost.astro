@@ -30,7 +30,12 @@ const SEO_TITLE = `${title} | Daniel Ngo`
 
 <html lang="en">
   <head>
-    <BaseHead title={SEO_TITLE} description={description} noindex={unlisted} />
+    <BaseHead
+      title={SEO_TITLE}
+      description={description}
+      image={featured_image_src}
+      noindex={unlisted}
+    />
   </head>
 
   <body class="transition duration-500 bg-white dark:bg-slate-900">
