@@ -27,8 +27,10 @@ const posts = entries.filter((entry) => {
 
   {featuredPosts.length > 0 && (
     <div class="grid grid-cols-1 gap-12">
-      {featuredPosts.map((entry) => {
-        return <Spotlight post={entry} />
+      {featuredPosts.map((entry, index) => {
+        return (
+          <Spotlight post={entry} loading={index === 0 ? 'eager' : 'lazy'} />
+        )
       })}
     </div>
   )}

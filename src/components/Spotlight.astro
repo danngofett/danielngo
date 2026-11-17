@@ -10,10 +10,18 @@ interface Props {
   stacked?: boolean
   /** Show the "YYYY Spotlight" label above the title. */
   showLabel?: boolean
+  /** Eager only for the image that is likely above the fold. */
+  loading?: 'eager' | 'lazy'
 }
 
 const { data, collection } = Astro.props.post
-const { stacked = false, showLabel = true } = Astro.props
+const { stacked = false, showLabel = true, loading = 'lazy' } = Astro.props
+
+// Rendered image width per breakpoint, mirroring the grid classes below
+// (container + section + card padding), so the browser picks a fitting file.
+const sizes = stacked
+  ? '(min-width: 1280px) 500px, (min-width: 1024px) 370px, (min-width: 768px) 610px, calc(100vw - 7rem)'
+  : '(min-width: 1280px) 720px, (min-width: 1024px) 420px, (min-width: 768px) 240px, calc(100vw - 7rem)'
 ---
 
 <a
@@ -64,7 +72,8 @@ const { stacked = false, showLabel = true } = Astro.props
         height={1920}
         format="webp"
         class="block rounded-lg"
-        loading="eager"
+        loading={loading}
+        sizes={sizes}
       />
     </div>
   )}

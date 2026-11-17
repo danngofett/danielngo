@@ -15,6 +15,13 @@ interface Props {
 const { data, collection } = Astro.props.post
 const isDraft = Astro.props.post.data.draft
 const { compact = false, inline = false } = Astro.props
+
+// Rendered image width per breakpoint, matching the grids that hold the cards.
+const sizes = inline
+  ? '(min-width: 768px) 260px, 120px'
+  : compact
+    ? '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw'
+    : '(min-width: 1024px) 33vw, 100vw'
 ---
 
 <a
@@ -39,6 +46,7 @@ const { compact = false, inline = false } = Astro.props
         format="webp"
         height={687}
         class="w-full rounded-xl object-fill"
+        sizes={sizes}
       />
     </div>
   )}
